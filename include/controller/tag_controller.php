@@ -7,7 +7,7 @@
 
 class Tag_Controller
 {
-    function display($params)
+    public function display($params)
     {
         $Log_Model = new Log_Model();
         $options_cache = Option::getAll();

@@ -5,7 +5,8 @@
  * @copyright (c) Emlog All Rights Reserved
  */
 
-class Cache {
+class Cache
+{
 
     private $db;
     private static $instance = null;
@@ -24,7 +25,8 @@ class Cache {
     private $logsort_cache;
     private $logalias_cache;
 
-    private function __construct() {
+    private function __construct()
+    {
         $this->db = Database::getInstance();
     }
 
@@ -33,7 +35,8 @@ class Cache {
      *
      * @return Cache
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (self::$instance == null) {
             self::$instance = new Cache();
         }
@@ -41,11 +44,12 @@ class Cache {
     }
     /**
      * 更新缓存
-     * 
+     *
      * @param array/string $cacheMethodName 需要更新的缓存，更新多个采用数组方式：array('options', 'user'),单个采用字符串方式：'options',全部则留空
      * @return unknown_type
      */
-    function updateCache($cacheMethodName = null) {
+    public function updateCache($cacheMethodName = null)
+    {
         // 更新单个缓存
         if (is_string($cacheMethodName)) {
             if (method_exists($this, 'mc_' . $cacheMethodName)) {
@@ -77,7 +81,8 @@ class Cache {
      * 站点配置缓存
      * 注意更新缓存的方法必须为mc开头
      */
-    private function mc_options() {
+    private function mc_options()
+    {
         $options_cache = array();
         $res = $this->db->query("SELECT * FROM " . DB_PREFIX . "options");
         while ($row = $this->db->fetch_array($res)) {
@@ -92,13 +97,14 @@ class Cache {
     /**
      * 用户信息缓存
      */
-    private function mc_user() {
+    private function mc_user()
+    {
         $user_cache = array();
         $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "user");
         while ($row = $this->db->fetch_array($query)) {
             $photo = array();
             $avatar = '';
-            if(!empty($row['photo'])){
+            if (!empty($row['photo'])) {
                 $photosrc = str_replace("../", '', $row['photo']);
                 $imgsize = chImageSize($row['photo'], Option::ICON_MAX_W, Option::ICON_MAX_H);
                 $photo['src'] = htmlspecialchars($photosrc);
@@ -118,7 +124,7 @@ class Cache {
                 'des' => htmlClean($row['description']),
                 'ischeck' => htmlspecialchars($row['ischeck']),
                 'role' => $row['role'],
-                );
+            );
         }
         $cacheData = serialize($user_cache);
         $this->cacheWrite($cacheData, 'user');
@@ -126,19 +132,20 @@ class Cache {
     /**
      * 站点统计缓存
      */
-    private function mc_sta() {
+    private function mc_sta()
+    {
         $sta_cache = array();
         $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "blog WHERE type='blog' AND hide='n' AND checked='y' ");
         $lognum = $data['total'];
 
         $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "blog WHERE type='blog' AND hide='y'");
-        $draftnum = $data['total'];		
+        $draftnum = $data['total'];
 
         $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "blog WHERE type='blog' AND hide='n' AND checked='n' ");
-        $checknum = $data['total'];			
+        $checknum = $data['total'];
 
         $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "comment WHERE hide='n' ");
-        $comnum = $data['total'];	
+        $comnum = $data['total'];
 
         $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "comment WHERE hide='y' ");
         $hidecom = $data['total'];
@@ -156,16 +163,16 @@ class Cache {
         while ($row = $this->db->fetch_array($query)) {
             $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "blog WHERE author={$row['uid']} AND hide='n' and type='blog'");
             $logNum = $data['total'];
-            
+
             $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "blog WHERE author={$row['uid']} AND hide='y' AND type='blog'");
             $draftNum = $data['total'];
-            
+
             $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "comment AS a, " . DB_PREFIX . "blog AS b WHERE a.gid = b.gid AND b.author={$row['uid']}");
-            $commentNum = $data['total'];			
+            $commentNum = $data['total'];
 
             $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "comment AS a, " . DB_PREFIX . "blog AS b WHERE a.gid=b.gid and a.hide='y' AND b.author={$row['uid']}");
-            $hidecommentNum = $data['total'];			
-            
+            $hidecommentNum = $data['total'];
+
             $sta_cache[$row['uid']] = array(
                 'lognum' => $logNum,
                 'draftnum' => $draftNum,
@@ -180,9 +187,10 @@ class Cache {
     /**
      * 最新评论缓存
      */
-    private function mc_comment() {
+    private function mc_comment()
+    {
         $query = $this->db->query("SELECT option_value,option_name FROM " . DB_PREFIX . "options WHERE option_name IN('index_comnum','comment_subnum','comment_paging','comment_pnum','comment_order')");
-        while($row = $this->db->fetch_array($query)) {
+        while ($row = $this->db->fetch_array($query)) {
             ${$row['option_name']} = $row['option_value'];
         }
         $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "comment WHERE hide='n' ORDER BY date DESC LIMIT 0, $index_comnum");
@@ -190,19 +198,19 @@ class Cache {
         $com_cids = array();
         while ($show_com = $this->db->fetch_array($query)) {
             $com_page = '';
-            if($comment_paging == 'y') {
+            if ($comment_paging == 'y') {
                 $pid = $show_com['pid'];
                 $cid = $show_com['cid'];
                 $order = $comment_order == 'newer' ? 'DESC' : '';
-                while($pid != 0) {
+                while ($pid != 0) {
                     $show_pid = $this->db->once_fetch_array("SELECT cid,pid FROM " . DB_PREFIX . "comment WHERE cid=$pid");
                     $pid = $show_pid['pid'];
                     $cid = $show_pid['cid'];
                 }
-                if(!isset($com_cids[$show_com['gid']])) {
+                if (!isset($com_cids[$show_com['gid']])) {
                     $com_cids[$show_com['gid']] = array();
                     $query2 = $this->db->query("SELECT cid FROM " . DB_PREFIX . "comment WHERE gid=" . $show_com['gid'] . " AND pid=0 AND hide='n' ORDER BY date $order");
-                    while($show_cid = $this->db->fetch_array($query2)) {
+                    while ($show_cid = $this->db->fetch_array($query2)) {
                         $com_cids[$show_com['gid']][] = $show_cid['cid'];
                     }
                 }
@@ -216,7 +224,7 @@ class Cache {
                 'page' => $com_page,
                 'mail' => $show_com['mail'],
                 'content' => htmlClean(subString($show_com['comment'], 0, $comment_subnum), false),
-                );
+            );
         }
         $cacheData = serialize($com_cache);
         $this->cacheWrite($cacheData, 'comment');
@@ -224,7 +232,8 @@ class Cache {
     /**
      * 侧边栏标签缓存
      */
-    private function mc_tags() {
+    private function mc_tags()
+    {
         $tag_cache = array();
         $query = $this->db->query("SELECT gid FROM " . DB_PREFIX . "tag");
         $tagnum = 0;
@@ -243,9 +252,9 @@ class Cache {
             }
             $tagnum++;
         }
-        $spread = ($tagnum > 12?12:$tagnum);
+        $spread = ($tagnum > 12 ? 12 : $tagnum);
         $rank = $maxuse - $minuse;
-        $rank = ($rank == 0?1:$rank);
+        $rank = ($rank == 0 ? 1 : $rank);
         $rank = $spread / $rank;
         // 获取草稿id
         $hideGids = array();
@@ -265,11 +274,11 @@ class Cache {
             $usenum = substr_count($show_tag['gid'], ',') - 1;
             $fontsize = 10 + round(($usenum - $minuse) * $rank); //maxfont:22pt,minfont:10pt
             $tag_cache[] = array(
-                    'tagurl' => urlencode($show_tag['tagname']),
-                    'tagname' => htmlspecialchars($show_tag['tagname']),
-                    'fontsize' => $fontsize,
-                    'usenum' => $usenum
-                    );
+                'tagurl' => urlencode($show_tag['tagname']),
+                'tagname' => htmlspecialchars($show_tag['tagname']),
+                'fontsize' => $fontsize,
+                'usenum' => $usenum,
+            );
         }
         $cacheData = serialize($tag_cache);
         $this->cacheWrite($cacheData, 'tags');
@@ -277,7 +286,8 @@ class Cache {
     /**
      * 侧边栏分类缓存
      */
-    private function mc_sort() {
+    private function mc_sort()
+    {
         $sort_cache = array();
         $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "sort ORDER BY pid ASC,taxis ASC");
         while ($row = $this->db->fetch_array($query)) {
@@ -287,12 +297,12 @@ class Cache {
                 'lognum' => $logNum,
                 'sortname' => htmlspecialchars($row['sortname']),
                 'description' => htmlspecialchars($row['description']),
-                'alias' =>$row['alias'],
+                'alias' => $row['alias'],
                 'sid' => intval($row['sid']),
                 'taxis' => intval($row['taxis']),
                 'pid' => intval($row['pid']),
                 'template' => htmlspecialchars($row['template']),
-                );
+            );
             if ($sortData['pid'] == 0) {
                 $sortData['children'] = array();
             } elseif (isset($sort_cache[$row['pid']])) {
@@ -306,15 +316,16 @@ class Cache {
     /**
      * 友情链接缓存
      */
-    private function mc_link() {
+    private function mc_link()
+    {
         $link_cache = array();
         $query = $this->db->query("SELECT siteurl,sitename,description FROM " . DB_PREFIX . "link WHERE hide='n' ORDER BY taxis ASC");
         while ($show_link = $this->db->fetch_array($query)) {
             $link_cache[] = array(
                 'link' => htmlspecialchars($show_link['sitename']),
                 'url' => htmlspecialchars($show_link['siteurl']),
-                'des' => htmlspecialchars($show_link['description'])
-                );
+                'des' => htmlspecialchars($show_link['description']),
+            );
         }
         $cacheData = serialize($link_cache);
         $this->cacheWrite($cacheData, 'link');
@@ -322,7 +333,8 @@ class Cache {
     /**
      * 导航缓存
      */
-    private function mc_navi() {
+    private function mc_navi()
+    {
         $navi_cache = array();
         $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "navi WHERE hide='n' ORDER BY pid ASC, taxis ASC");
         $sorts = $this->readCache('sort');
@@ -336,20 +348,20 @@ class Cache {
                 }
             }
             $naviData = array(
-                    'id' => intval($row['id']),
-                    'naviname' => htmlspecialchars(trim($row['naviname'])),
-                    'url' => htmlspecialchars(trim($url)),
-                    'newtab' => $row['newtab'],
-                    'isdefault' => $row['isdefault'],
-                    'type' => intval($row['type']),
-                    'typeId' => intval($row['type_id']),
-                    'taxis' => intval($row['taxis']),
-                    'hide' => $row['hide'],
-                    'pid' => intval($row['pid']),
-                    'children' => $children,
-                    );
+                'id' => intval($row['id']),
+                'naviname' => htmlspecialchars(trim($row['naviname'])),
+                'url' => htmlspecialchars(trim($url)),
+                'newtab' => $row['newtab'],
+                'isdefault' => $row['isdefault'],
+                'type' => intval($row['type']),
+                'typeId' => intval($row['type_id']),
+                'taxis' => intval($row['taxis']),
+                'hide' => $row['hide'],
+                'pid' => intval($row['pid']),
+                'children' => $children,
+            );
             if ($row['type'] == Navi_Model::navitype_custom) {
-                if($naviData['pid'] == 0) {
+                if ($naviData['pid'] == 0) {
                     $naviData['childnavi'] = array();
                 } elseif (isset($navi_cache[$row['pid']])) {
                     $navi_cache[$row['pid']]['childnavi'][] = $naviData;
@@ -363,7 +375,8 @@ class Cache {
     /**
      * 最新文章
      */
-    private function mc_newlog() {
+    private function mc_newlog()
+    {
         $row = $this->db->fetch_array($this->db->query("SELECT option_value FROM " . DB_PREFIX . "options where option_name='index_newlognum'"));
         $index_newlognum = $row['option_value'];
         $sql = "SELECT gid,title FROM " . DB_PREFIX . "blog WHERE hide='n' and checked='y' and type='blog' ORDER BY date DESC LIMIT 0, $index_newlognum";
@@ -380,7 +393,8 @@ class Cache {
     /**
      * 文章归档缓存
      */
-    private function mc_record() {
+    private function mc_record()
+    {
         $query = $this->db->query('select date from ' . DB_PREFIX . "blog WHERE hide='n' and checked='y' and type='blog' ORDER BY date DESC");
         $record = 'xxxx_x';
         $p = 0;
@@ -389,23 +403,23 @@ class Cache {
         while ($show_record = $this->db->fetch_array($query)) {
             $f_record = gmdate('Y_n', $show_record['date']);
             if ($record != $f_record) {
-                $h = $p-1;
+                $h = $p - 1;
                 if ($h != -1) {
                     $record_cache[$h]['lognum'] = $lognum;
                 }
                 $record_cache[$p] = array(
                     'record' => gmdate('Y年n月', $show_record['date']),
-                    'date' => gmdate('Ym', $show_record['date'])
-                    );
+                    'date' => gmdate('Ym', $show_record['date']),
+                );
                 $p++;
                 $lognum = 1;
-            }else {
+            } else {
                 $lognum++;
                 continue;
             }
             $record = $f_record;
         }
-        $j = $p-1;
+        $j = $p - 1;
         if ($j >= 0) {
             $record_cache[$j]['lognum'] = $lognum;
         }
@@ -416,20 +430,19 @@ class Cache {
     /**
      * 文章标签缓存
      */
-    private function mc_logtags() {
+    private function mc_logtags()
+    {
         $tag_model = new Tag_Model();
         $newlog = $this->readCache("newlog");
 
         $log_cache_tags = array();
-        foreach ($newlog as $each)
-        {
+        foreach ($newlog as $each) {
             $gid = $each['gid'];
             $tag_ids = $tag_model->getTagIdsFromBlogId($gid);
             $tag_names = $tag_model->getNamesFromIds($tag_ids);
 
             $tags = array();
-            foreach ($tag_names as $key => $value)
-            {
+            foreach ($tag_names as $key => $value) {
                 $tag = array();
                 $tag['tagurl'] = rawurlencode($value);
                 $tag['tagname'] = htmlspecialchars($value);
@@ -446,7 +459,8 @@ class Cache {
     /**
      * 文章分类缓存
      */
-    private function mc_logsort() {
+    private function mc_logsort()
+    {
         $sql = "SELECT gid,sortid FROM " . DB_PREFIX . "blog where type='blog'";
         $query = $this->db->query($sql);
         $log_cache_sort = array();
@@ -467,7 +481,8 @@ class Cache {
     /**
      * 文章别名缓存
      */
-    private function mc_logalias() {
+    private function mc_logalias()
+    {
         $sql = "SELECT gid,alias FROM " . DB_PREFIX . "blog where alias!=''";
         $query = $this->db->query($sql);
         $log_cache_alias = array();
@@ -481,21 +496,23 @@ class Cache {
     /**
      * 写入缓存
      */
-    function cacheWrite ($cacheData, $cacheName) {
+    public function cacheWrite($cacheData, $cacheName)
+    {
         $cachefile = EMLOG_ROOT . '/content/cache/' . $cacheName . '.php';
         $cacheData = "<?php exit;//" . $cacheData;
-        @ $fp = fopen($cachefile, 'wb') OR emMsg('读取缓存失败。如果您使用的是Unix/Linux主机，请修改缓存目录 (content/cache) 下所有文件的权限为777。如果您使用的是Windows主机，请联系管理员，将该目录下所有文件设为可写');
-        @ $fw = fwrite($fp, $cacheData) OR emMsg('写入缓存失败，缓存目录 (content/cache) 不可写');
-        $this->{$cacheName.'_cache'} = null;
+        @$fp = fopen($cachefile, 'wb') or emMsg('读取缓存失败。如果您使用的是Unix/Linux主机，请修改缓存目录 (content/cache) 下所有文件的权限为777。如果您使用的是Windows主机，请联系管理员，将该目录下所有文件设为可写');
+        @$fw = fwrite($fp, $cacheData) or emMsg('写入缓存失败，缓存目录 (content/cache) 不可写');
+        $this->{$cacheName . '_cache'} = null;
         fclose($fp);
     }
 
     /**
      * 读取缓存文件
      */
-    function readCache($cacheName) {
-        if ($this->{$cacheName.'_cache'} != null) {
-            return $this->{$cacheName.'_cache'};
+    public function readCache($cacheName)
+    {
+        if ($this->{$cacheName . '_cache'} != null) {
+            return $this->{$cacheName . '_cache'};
         } else {
             $cachefile = EMLOG_ROOT . '/content/cache/' . $cacheName . '.php';
             // 如果缓存文件不存在则自动生成缓存文件
@@ -508,8 +525,8 @@ class Cache {
                 $data = fread($fp, filesize($cachefile));
                 fclose($fp);
                 clearstatcache();
-                $this->{$cacheName.'_cache'} = unserialize(str_replace("<?php exit;//", '', $data));
-                return $this->{$cacheName.'_cache'};
+                $this->{$cacheName . '_cache'} = unserialize(str_replace("<?php exit;//", '', $data));
+                return $this->{$cacheName . '_cache'};
             }
         }
     }

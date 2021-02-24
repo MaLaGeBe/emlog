@@ -7,7 +7,7 @@
 
 class Log_Controller
 {
-    function display($params)
+    public function display($params)
     {
         $Log_Model = new Log_Model();
         $CACHE = Cache::getInstance();
@@ -33,7 +33,7 @@ class Log_Controller
         include View::getView('log_list');
     }
 
-    function displayContent($params)
+    public function displayContent($params)
     {
         $comment_page = isset($params[4]) && $params[4] == 'comment-page' ? intval($params[5]) : 1;
 
@@ -105,7 +105,7 @@ class Log_Controller
             $Log_Model->updateViewCount($logid);
             $neighborLog = $Log_Model->neighborLog($timestamp);
             $tb = array();
-            $tb_url = '';//兼容未删除引用模板
+            $tb_url = ''; //兼容未删除引用模板
             include View::getView('echo_log');
         } elseif ($type == 'page') {
             $template = !empty($template) && file_exists(TEMPLATE_PATH . $template . '.php') ? $template : 'page';

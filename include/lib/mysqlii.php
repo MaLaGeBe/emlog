@@ -5,7 +5,8 @@
  * @copyright (c) Emlog All Rights Reserved
  */
 
-class MySqlii {
+class MySqlii
+{
 
     /**
      * 查询次数
@@ -31,7 +32,8 @@ class MySqlii {
      */
     private static $instance = null;
 
-    private function __construct() {
+    private function __construct()
+    {
         if (!class_exists('mysqli')) {
             emMsg('服务器空间PHP不支持MySqli函数');
         }
@@ -61,7 +63,7 @@ class MySqlii {
                     emMsg("连接数据库失败，数据库服务器不可用");
                     break;
 
-                default :
+                default:
                     emMsg("连接数据库失败，请检查数据库信息。错误编号：" . $this->conn->connect_errno);
                     break;
             }
@@ -73,7 +75,8 @@ class MySqlii {
     /**
      * 静态方法，返回数据库连接实例
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (self::$instance == null) {
             self::$instance = new MySqlii();
         }
@@ -84,14 +87,16 @@ class MySqlii {
     /**
      * 关闭数据库连接
      */
-    function close() {
+    public function close()
+    {
         return $this->conn->close();
     }
 
     /**
      * 发送查询语句
      */
-    function query($sql, $ignore_err = FALSE) {
+    public function query($sql, $ignore_err = false)
+    {
         $this->result = $this->conn->query($sql);
         $this->queryCount++;
         if (!$ignore_err && 1046 == $this->geterrno()) {
@@ -107,11 +112,13 @@ class MySqlii {
     /**
      * 从结果集中取得一行作为关联数组/数字索引数组
      */
-    function fetch_array(mysqli_result $query, $type = MYSQLI_ASSOC) {
+    public function fetch_array(mysqli_result $query, $type = MYSQLI_ASSOC)
+    {
         return $query->fetch_array($type);
     }
 
-    function once_fetch_array($sql) {
+    public function once_fetch_array($sql)
+    {
         $this->result = $this->query($sql);
         return $this->fetch_array($this->result);
     }
@@ -119,7 +126,8 @@ class MySqlii {
     /**
      * 从结果集中取得一行作为数字索引数组
      */
-    function fetch_row(mysqli_result $query) {
+    public function fetch_row(mysqli_result $query)
+    {
         return $query->fetch_row();
     }
 
@@ -127,63 +135,72 @@ class MySqlii {
      * 取得行的数目
      *
      */
-    function num_rows(mysqli_result $query) {
+    public function num_rows(mysqli_result $query)
+    {
         return $query->num_rows;
     }
 
     /**
      * 取得结果集中字段的数目
      */
-    function num_fields(mysqli_result $query) {
+    public function num_fields(mysqli_result $query)
+    {
         return $query->field_count;
     }
 
     /**
      * 取得上一步 INSERT 操作产生的 ID
      */
-    function insert_id() {
+    public function insert_id()
+    {
         return $this->conn->insert_id;
     }
 
     /**
      * 获取mysql错误
      */
-    function geterror() {
+    public function geterror()
+    {
         return $this->conn->error;
     }
 
     /**
      * 获取mysql错误编码
      */
-    function geterrno() {
+    public function geterrno()
+    {
         return $this->conn->errno;
     }
 
     /**
      * Get number of affected rows in previous MySQL operation
      */
-    function affected_rows() {
+    public function affected_rows()
+    {
         return $this->conn->affected_rows;
     }
 
     /**
      * 取得数据库版本信息
      */
-    function getMysqlVersion() {
+    public function getMysqlVersion()
+    {
         return $this->conn->server_info;
     }
 
     /**
      * 取得数据库查询次数
      */
-    function getQueryCount() {
+    public function getQueryCount()
+    {
         return $this->queryCount;
     }
 
     /**
      *  Escapes special characters
      */
-    function escape_string($sql) {
+    public function escape_string($sql)
+    {
         return $this->conn->real_escape_string($sql);
     }
 }

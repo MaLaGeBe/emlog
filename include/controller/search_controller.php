@@ -7,7 +7,7 @@
 
 class Search_Controller
 {
-    function display($params)
+    public function display($params)
     {
         $Log_Model = new Log_Model();
         $options_cache = Option::getAll();
@@ -17,7 +17,6 @@ class Search_Controller
         $keyword = isset($params[1]) && $params[1] == 'keyword' ? trim($params[2]) : '';
         $keyword = addslashes(htmlspecialchars(urldecode($keyword)));
         $keyword = str_replace(array('%', '_'), array('\%', '\_'), $keyword);
-
 
         $pageurl = '';
 

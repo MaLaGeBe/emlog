@@ -33,33 +33,33 @@
         <hr class="sidebar-divider my-0">
 
         <li class="nav-item" id="menu_home">
-            <a class="nav-link" href="./"><i class="fas fa-fw fa-tachometer-alt"></i><span>管理后台</span></a>
+            <a class="nav-link" href="./"><i class="fas fa-fw fa-tachometer-alt"></i><span> 管理后台</span></a>
         </li>
 
         <hr class="sidebar-divider my-0">
 
         <li class="nav-item" id="menu_log">
-            <a class="nav-link" href="admin_log.php"><i class="fas fa-table"></i><span>文章</span></a>
+            <a class="nav-link" href="admin_log.php"><i class="fas fa-table"></i><span> 文章</span></a>
         </li>
 
         <li class="nav-item" id="menu_page">
-            <a class="nav-link" href="page.php"><i class="fas fa-file"></i><span>页面</span></a>
+            <a class="nav-link" href="page.php"><i class="fas fa-file"></i><span> 页面</span></a>
         </li>
 
         <li class="nav-item" id="menu_cm">
-            <a class="nav-link" href="comment.php"><i class="fas fa-comment"></i><span>评论</span></a>
+            <a class="nav-link" href="comment.php"><i class="fas fa-comment"></i><span> 评论</span></a>
         </li>
 
         <li class="nav-item" id="menu_tag">
-            <a class="nav-link" href="tag.php"><i class="fas fa-tags"></i><span>标签</span></a>
+            <a class="nav-link" href="tag.php"><i class="fas fa-tags"></i><span> 标签</span></a>
         </li>
 
         <li class="nav-item" id="menu_sort">
-            <a class="nav-link" href="sort.php"><i class="fas fa-table"></i><span>分类</span></a>
+            <a class="nav-link" href="sort.php"><i class="fas fa-table"></i><span> 分类</span></a>
         </li>
 
         <li class="nav-item" id="menu_link">
-            <a class="nav-link" href="./link.php"><i class="fas fa-link"></i><span>链接</span></a>
+            <a class="nav-link" href="./link.php"><i class="fas fa-link"></i><span> 链接</span></a>
         </li>
 
         <hr class="sidebar-divider d-none d-md-block">

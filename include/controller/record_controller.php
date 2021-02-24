@@ -7,7 +7,7 @@
 
 class Record_Controller
 {
-    function display($params)
+    public function display($params)
     {
         $Log_Model = new Log_Model();
         $options_cache = Option::getAll();
@@ -16,8 +16,7 @@ class Record_Controller
         $page = isset($params[4]) && $params[4] == 'page' ? abs(intval($params[5])) : 1;
         $record = isset($params[1]) && $params[1] == 'record' ? intval($params[2]) : '';
 
-        $GLOBALS['record'] = $record;//for sidebar calendar
-
+        $GLOBALS['record'] = $record; //for sidebar calendar
 
         $pageurl = '';
 

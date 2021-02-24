@@ -4,7 +4,8 @@
  * @copyright (c) Emlog All Rights Reserved
  */
 
-class LoginAuth{
+class LoginAuth
+{
 
     const LOGIN_ERROR_USER = -1;
     const LOGIN_ERROR_PASSWD = -2;
@@ -13,20 +14,21 @@ class LoginAuth{
     /**
      * 验证用户是否处于登录状态
      */
-    public static function isLogin() {
+    public static function isLogin()
+    {
         global $userData;
         $auth_cookie = '';
-        if(isset($_COOKIE[AUTH_COOKIE_NAME])) {
+        if (isset($_COOKIE[AUTH_COOKIE_NAME])) {
             $auth_cookie = $_COOKIE[AUTH_COOKIE_NAME];
         } elseif (isset($_POST[AUTH_COOKIE_NAME])) {
             $auth_cookie = $_POST[AUTH_COOKIE_NAME];
-        } else{
+        } else {
             return false;
         }
 
-        if(($userData = self::validateAuthCookie($auth_cookie)) === false) {
+        if (($userData = self::validateAuthCookie($auth_cookie)) === false) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -39,7 +41,8 @@ class LoginAuth{
      * @param string $imgcode
      * @param string $logincode
      */
-    public static function checkUser($username, $password, $imgcode, $logincode = false) {
+    public static function checkUser($username, $password, $imgcode, $logincode = false)
+    {
         session_start();
         if (trim($username) == '' || trim($password) == '') {
             return false;
@@ -54,9 +57,9 @@ class LoginAuth{
                 return self::LOGIN_ERROR_USER;
             }
             $hash = $userData['password'];
-            if (true === self::checkPassword($password, $hash)){
+            if (true === self::checkPassword($password, $hash)) {
                 return true;
-            } else{
+            } else {
                 return self::LOGIN_ERROR_PASSWD;
             }
         }
@@ -65,7 +68,8 @@ class LoginAuth{
     /**
      * 登录页面
      */
-    public static function loginPage($errorCode = NULL) {
+    public static function loginPage($errorCode = null)
+    {
         Option::get('login_code') == 'y' ?
         $ckcode = "<span>验证码</span>
         <div class=\"val\"><input name=\"imgcode\" id=\"imgcode\" type=\"text\" />
@@ -95,13 +99,14 @@ class LoginAuth{
      * @param string $userLogin User's username
      * @return bool|object False on failure, User DB row object
      */
-    public static function getUserDataByLogin($userLogin) {
+    public static function getUserDataByLogin($userLogin)
+    {
         $DB = Database::getInstance();
         if (empty($userLogin)) {
             return false;
         }
         $userData = false;
-        if (!$userData = $DB->once_fetch_array("SELECT * FROM ".DB_PREFIX."user WHERE username = '$userLogin'")) {
+        if (!$userData = $DB->once_fetch_array("SELECT * FROM " . DB_PREFIX . "user WHERE username = '$userLogin'")) {
             return false;
         }
         $userData['nickname'] = htmlspecialchars($userData['nickname']);
@@ -116,7 +121,8 @@ class LoginAuth{
      * @param string $hash Hash of the user's password to check against.
      * @return bool False, if the $password does not match the hashed password
      */
-    public static function checkPassword($password, $hash) {
+    public static function checkPassword($password, $hash)
+    {
         global $em_hasher;
         if (empty($em_hasher)) {
             $em_hasher = new PasswordHash(8, true);
@@ -131,15 +137,16 @@ class LoginAuth{
      * @param int $user_id User ID
      * @param bool $remember Whether to remember the user or not
      */
-    public static function setAuthCookie($user_login, $ispersis = false) {
+    public static function setAuthCookie($user_login, $ispersis = false)
+    {
         if ($ispersis) {
-            $expiration  = time() + 3600 * 24 * 30 * 12;
+            $expiration = time() + 3600 * 24 * 30 * 12;
         } else {
             $expiration = null;
         }
         $auth_cookie_name = AUTH_COOKIE_NAME;
         $auth_cookie = self::generateAuthCookie($user_login, $expiration);
-        setcookie($auth_cookie_name, $auth_cookie, $expiration,'/');
+        setcookie($auth_cookie_name, $auth_cookie, $expiration, '/');
     }
 
     /**
@@ -149,7 +156,8 @@ class LoginAuth{
      * @param int $expiration Cookie expiration in seconds
      * @return string Authentication cookie contents
      */
-    private static function generateAuthCookie($user_login, $expiration) {
+    private static function generateAuthCookie($user_login, $expiration)
+    {
         $key = self::emHash($user_login . '|' . $expiration);
         $hash = hash_hmac('md5', $user_login . '|' . $expiration, $key);
 
@@ -164,7 +172,8 @@ class LoginAuth{
      * @param string $data Plain text to hash
      * @return string Hash of $data
      */
-    private static function emHash($data) {
+    private static function emHash($data)
+    {
         $key = AUTH_KEY;
         return hash_hmac('md5', $data, $key);
     }
@@ -176,7 +185,8 @@ class LoginAuth{
      * @param string $cookie Optional. If used, will validate contents instead of cookie's
      * @return bool|int False if invalid cookie, User ID if valid.
      */
-    private static function validateAuthCookie($cookie = '') {
+    private static function validateAuthCookie($cookie = '')
+    {
         if (empty($cookie)) {
             return false;
         }
@@ -209,7 +219,8 @@ class LoginAuth{
     /**
      * 生成token，防御CSRF攻击
      */
-    public static function genToken() {
+    public static function genToken()
+    {
         $token_cookie_name = 'EM_TOKENCOOKIE_' . md5(substr(AUTH_KEY, 16, 32) . UID);
         if (isset($_COOKIE[$token_cookie_name])) {
             return $_COOKIE[$token_cookie_name];
@@ -223,7 +234,8 @@ class LoginAuth{
     /**
      * 检查token，防御CSRF攻击
      */
-    public static function checkToken(){
+    public static function checkToken()
+    {
         $token = isset($_REQUEST['token']) ? addslashes($_REQUEST['token']) : '';
         if ($token != self::genToken()) {
             emMsg('权限不足，token error');

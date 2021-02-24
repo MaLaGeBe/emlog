@@ -7,7 +7,7 @@
 
 class Sort_Controller
 {
-    function display($params)
+    public function display($params)
     {
         $Log_Model = new Log_Model();
         $CACHE = Cache::getInstance();
@@ -31,7 +31,6 @@ class Sort_Controller
                 }
             }
         }
-
 
         $pageurl = '';
 

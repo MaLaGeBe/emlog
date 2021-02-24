@@ -52,7 +52,13 @@ $emHooks = array();
 if ($active_plugins && is_array($active_plugins)) {
     foreach ($active_plugins as $plugin) {
         if (true === checkPlugin($plugin)) {
-            include_once(EMLOG_ROOT . '/content/plugins/' . $plugin);
+            include_once EMLOG_ROOT . '/content/plugins/' . $plugin;
         }
     }
+}
+
+// 提前载入模板函数，提高模板可玩性，这样模板也可以集成插件使用钩子了
+$active_template = TPLS_PATH . Option::get('nonce_templet') . '/functions.php';
+if (file_exists($active_template)) {
+    include_once $active_template;
 }

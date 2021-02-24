@@ -5,16 +5,16 @@
  * @copyright (c) Emlog All Rights Reserved
  */
 
-class Database {
+class Database
+{
 
-    public static function getInstance() {
-        if (class_exists('mysqli', FALSE)) {
+    public static function getInstance()
+    {
+        if (class_exists('mysqli', false)) {
             return MySqlii::getInstance();
-        }
-        else if (class_exists('mysql', FALSE)) {
+        } else if (class_exists('mysql', false)) {
             return MySql::getInstance();
-        }
-        else {
+        } else {
             emMsg('服务器空间PHP不支持MySql数据库');
         }
     }

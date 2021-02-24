@@ -7,7 +7,7 @@
 
 class Author_Controller
 {
-    function display($params)
+    public function display($params)
     {
         $Log_Model = new Log_Model();
         $CACHE = Cache::getInstance();
@@ -16,7 +16,6 @@ class Author_Controller
 
         $page = isset($params[4]) && $params[4] == 'page' ? abs(intval($params[5])) : 1;
         $author = isset($params[1]) && $params[1] == 'author' ? intval($params[2]) : '';
-
 
         $pageurl = '';
 

@@ -4,24 +4,27 @@
  * @copyright (c) Emlog All Rights Reserved
  */
 
-class User_Model {
+class User_Model
+{
 
     private $db;
 
-    function __construct() {
+    public function __construct()
+    {
         $this->db = Database::getInstance();
     }
 
-    function getUsers($page = null) {
+    public function getUsers($page = null)
+    {
         $condition = '';
         if ($page) {
             $perpage_num = Option::get('admin_perpage_num');
             $startId = ($page - 1) * $perpage_num;
-            $condition = "LIMIT $startId, ".$perpage_num;
+            $condition = "LIMIT $startId, " . $perpage_num;
         }
-        $res = $this->db->query("SELECT * FROM ".DB_PREFIX."user $condition");
+        $res = $this->db->query("SELECT * FROM " . DB_PREFIX . "user $condition");
         $users = array();
-        while($row = $this->db->fetch_array($res)) {
+        while ($row = $this->db->fetch_array($res)) {
             $row['name'] = htmlspecialchars($row['nickname']);
             $row['login'] = htmlspecialchars($row['username']);
             $row['email'] = htmlspecialchars($row['email']);
@@ -31,10 +34,11 @@ class User_Model {
         return $users;
     }
 
-    function getOneUser($uid) {
-        $row = $this->db->once_fetch_array("select * from ".DB_PREFIX."user where uid=$uid");
+    public function getOneUser($uid)
+    {
+        $row = $this->db->once_fetch_array("select * from " . DB_PREFIX . "user where uid=$uid");
         $userData = array();
-        if($row) {
+        if ($row) {
             $userData = array(
                 'username' => htmlspecialchars($row['username']),
                 'nickname' => htmlspecialchars($row['nickname']),
@@ -48,23 +52,26 @@ class User_Model {
         return $userData;
     }
 
-    function updateUser($userData, $uid) {
+    public function updateUser($userData, $uid)
+    {
         $Item = array();
         foreach ($userData as $key => $data) {
             $Item[] = "$key='$data'";
         }
         $upStr = implode(',', $Item);
-        $this->db->query("update ".DB_PREFIX."user set $upStr where uid=$uid");
+        $this->db->query("update " . DB_PREFIX . "user set $upStr where uid=$uid");
     }
 
-    function addUser($login, $password,  $role, $ischeck) {
-        $sql="insert into ".DB_PREFIX."user (username,password,role,ischeck) values('$login','$password','$role','$ischeck')";
+    public function addUser($login, $password, $role, $ischeck)
+    {
+        $sql = "insert into " . DB_PREFIX . "user (username,password,role,ischeck) values('$login','$password','$role','$ischeck')";
         $this->db->query($sql);
     }
 
-    function deleteUser($uid) {
-        $this->db->query("update ".DB_PREFIX."blog set author=1 and checked='y' where author=$uid");
-        $this->db->query("delete from ".DB_PREFIX."user where uid=$uid");
+    public function deleteUser($uid)
+    {
+        $this->db->query("update " . DB_PREFIX . "blog set author=1 and checked='y' where author=$uid");
+        $this->db->query("delete from " . DB_PREFIX . "user where uid=$uid");
     }
 
     /**
@@ -74,12 +81,13 @@ class User_Model {
      * @param int $uid 兼容更新作者资料时用户名未变更情况
      * @return boolean
      */
-    function isUserExist($login, $uid = '') {
-        $subSql = $uid ? 'and uid!='.$uid : '';
-        $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM ".DB_PREFIX."user WHERE username='$login' $subSql");
+    public function isUserExist($login, $uid = '')
+    {
+        $subSql = $uid ? 'and uid!=' . $uid : '';
+        $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "user WHERE username='$login' $subSql");
         if ($data['total'] > 0) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -91,21 +99,23 @@ class User_Model {
      * @param int $uid 兼容更新作者资料时用户名未变更情况
      * @return boolean
      */
-    function isNicknameExist($nickname, $uid = '') {
-        if(empty($nickname)) {
-            return FALSE;
+    public function isNicknameExist($nickname, $uid = '')
+    {
+        if (empty($nickname)) {
+            return false;
         }
-        $subSql = $uid ? 'and uid!='.$uid : '';
-        $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM ".DB_PREFIX."user WHERE nickname='$nickname' $subSql");
+        $subSql = $uid ? 'and uid!=' . $uid : '';
+        $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "user WHERE nickname='$nickname' $subSql");
         if ($data['total'] > 0) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    function getUserNum() {
-        $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM ".DB_PREFIX."user");
+    public function getUserNum()
+    {
+        $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "user");
         return $data['total'];
     }
 }

@@ -4,10 +4,11 @@
  * @copyright (c) Emlog All Rights Reserved
  */
 
-class Dispatcher {
+class Dispatcher
+{
 
     static $_instance;
-    
+
     /**
      * 请求模块
      */
@@ -31,10 +32,11 @@ class Dispatcher {
     /**
      * 访问路径
      */
-    private $_path = NULL;
+    private $_path = null;
 
-    public static function getInstance() {
-        if(self::$_instance == null) {
+    public static function getInstance()
+    {
+        if (self::$_instance == null) {
             self::$_instance = new Dispatcher();
             return self::$_instance;
         } else {
@@ -42,7 +44,8 @@ class Dispatcher {
         }
     }
 
-    private function __construct() {
+    private function __construct()
+    {
         $this->_path = $this->setPath();
         $this->_routingTable = Option::getRoutingTable();
 
@@ -71,13 +74,15 @@ class Dispatcher {
         }
     }
 
-    public function dispatch(){
+    public function dispatch()
+    {
         $module = new $this->_model();
         $method = $this->_method;
         $module->$method($this->_params);
     }
 
-    public static function setPath(){
+    public static function setPath()
+    {
         $path = '';
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { //iis
             $path = $_SERVER['HTTP_X_REWRITE_URL'];
@@ -85,9 +90,9 @@ class Dispatcher {
             $path = $_SERVER['REQUEST_URI'];
         } else {
             if (isset($_SERVER['argv'])) {
-                $path = $_SERVER['PHP_SELF'] .'?'. $_SERVER['argv'][0];
+                $path = $_SERVER['PHP_SELF'] . '?' . $_SERVER['argv'][0];
             } else {
-                $path = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
+                $path = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
             }
         }
 
