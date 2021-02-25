@@ -173,7 +173,7 @@ class Log_Model
      * @param int $perPageNum
      * @return array
      */
-    public function getLogsForHome($condition = '', $page = 1, $perPageNum)
+    public function getLogsForHome($perPageNum, $condition = '', $page = 1)
     {
         $start_limit = !empty($page) ? ($page - 1) * $perPageNum : 0;
         $limit = $perPageNum ? "LIMIT $start_limit, $perPageNum" : '';
