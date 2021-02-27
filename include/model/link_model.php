@@ -37,12 +37,9 @@ class Link_Model
         $this->db->query("update " . DB_PREFIX . "link set $upStr where id=$linkId");
     }
 
-    public function addLink($name, $url, $des, $taxis)
+    public function addLink($name, $url, $des)
     {
-        if ($taxis > 30000 || $taxis < 0) {
-            $taxis = 0;
-        }
-        $sql = "insert into " . DB_PREFIX . "link (sitename,siteurl,description,taxis) values('$name','$url','$des', $taxis)";
+        $sql = "insert into " . DB_PREFIX . "link (sitename,siteurl,description) values('$name','$url','$des')";
         $this->db->query($sql);
     }
 
@@ -56,7 +53,7 @@ class Link_Model
             $linkData = array(
                 'sitename' => htmlspecialchars(trim($row['sitename'])),
                 'siteurl' => htmlspecialchars(trim($row['siteurl'])),
-                'description' => htmlspecialchars(trim($row['description'])),
+                'description' => htmlspecialchars(trim($row['description']))
             );
         }
         return $linkData;
@@ -66,5 +63,4 @@ class Link_Model
     {
         $this->db->query("DELETE FROM " . DB_PREFIX . "link where id=$linkId");
     }
-
 }
