@@ -11,19 +11,18 @@ require_once EMLOG_ROOT . '/include/lib/function.base.php';
 header('Content-Type: text/html; charset=UTF-8');
 spl_autoload_register("emAutoload");
 
-$act = isset($_GET['action']) ? $_GET['action'] : '';
-
-if (PHP_VERSION < '7.0'){
-    emMsg('您的php版本过低，请选用支持PHP7以上的环境安装emlog。');
+if (PHP_VERSION < '7.0') {
+    emMsg('您的php版本过低，请选用支持PHP7及以上的环境安装emlog。');
 }
 
+$act = $_GET['action'] ?? '';
+
 if (!$act) {
-?>
+    ?>
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
-
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>emlog</title>
         <style type="text/css">
             <!--
@@ -92,66 +91,65 @@ if (!$act) {
             .main li {
                 margin: 20px 0px;
             }
+
             -->
         </style>
     </head>
-
     <body>
-        <form name="form1" method="post" action="install.php?action=install">
-            <div class="main">
-                <p class="logo"></p>
-                <p class="title">emlog <?php echo Option::EMLOG_VERSION ?> 安装程序</p>
-                <div class="b">
-                    <p class="title2">MySQL数据库设置</p>
-                    <li>
-                        数据库地址： <br />
-                        <input name="hostname" type="text" class="input" value="127.0.0.1">
-                        <span class="care">(通常为 localhost/127.0.0.1， 不必修改)</span>
-                    </li>
-                    <li>
-                        数据库用户名：<br /><input name="dbuser" type="text" class="input" value="">
-                    </li>
-                    <li>
-                        数据库密码：<br /><input name="password" type="password" class="input">
-                    </li>
-                    <li>
-                        数据库名：<br />
-                        <input name="dbname" type="text" class="input" value="">
-                        <span class="care">(程序不会自动创建数据库，请提前创建一个空数据库或使用已有数据库)</span>
-                    </li>
-                    <li>
-                        数据库表前缀：<br />
-                        <input name="dbprefix" type="text" class="input" value="emlog_">
-                        <span class="care"> (通常默认即可，不必修改。由英文字母、数字、下划线组成，且必须以下划线结束)</span>
-                    </li>
-                </div>
-                <div class="c">
-                    <p class="title2">管理员设置</p>
-                    <li>
-                        登录名：<br />
-                        <input name="admin" type="text" class="input">
-                    </li>
-                    <li>
-                        登录密码：<br />
-                        <input name="adminpw" type="password" class="input">
-                        <span class="care">(不小于6位)</span>
-                    </li>
-                    <li>
-                        再次输入登录密码：<br />
-                        <input name="adminpw2" type="password" class="input">
-                    </li>
-                </div>
-                <div>
-                    <p class="foot">
-                        <input type="submit" class="submit" value="开始安装emlog">
-                    </p>
-                </div>
+    <form name="form1" method="post" action="install.php?action=install">
+        <div class="main">
+            <p class="logo"></p>
+            <p class="title">emlog <?php echo Option::EMLOG_VERSION ?> 安装程序</p>
+            <div class="b">
+                <p class="title2">MySQL数据库设置</p>
+                <li>
+                    数据库地址： <br/>
+                    <input name="hostname" type="text" class="input" value="127.0.0.1">
+                    <span class="care">(通常为 localhost/127.0.0.1， 不必修改)</span>
+                </li>
+                <li>
+                    数据库用户名：<br/><input name="dbuser" type="text" class="input" value="">
+                </li>
+                <li>
+                    数据库密码：<br/><input name="password" type="password" class="input">
+                </li>
+                <li>
+                    数据库名：<br/>
+                    <input name="dbname" type="text" class="input" value="">
+                    <span class="care">(程序不会自动创建数据库，请提前创建一个空数据库或使用已有数据库)</span>
+                </li>
+                <li>
+                    数据库表前缀：<br/>
+                    <input name="dbprefix" type="text" class="input" value="emlog_">
+                    <span class="care"> (通常默认即可，不必修改。由英文字母、数字、下划线组成，且必须以下划线结束)</span>
+                </li>
             </div>
-        </form>
+            <div class="c">
+                <p class="title2">管理员设置</p>
+                <li>
+                    登录名：<br/>
+                    <input name="admin" type="text" class="input">
+                </li>
+                <li>
+                    登录密码：<br/>
+                    <input name="adminpw" type="password" class="input">
+                    <span class="care">(不小于6位)</span>
+                </li>
+                <li>
+                    再次输入登录密码：<br/>
+                    <input name="adminpw2" type="password" class="input">
+                </li>
+            </div>
+            <div>
+                <p class="foot">
+                    <input type="submit" class="submit" value="开始安装emlog">
+                </p>
+            </div>
+        </div>
+    </form>
     </body>
-
     </html>
-<?php
+    <?php
 }
 if ($act == 'install' || $act == 'reinstall') {
     $db_host = isset($_POST['hostname']) ? addslashes(trim($_POST['hostname'])) : '';
@@ -177,14 +175,18 @@ if ($act == 'install' || $act == 'reinstall') {
     }
 
     //初始化数据库类
-    define('DB_HOST',   $db_host);
-    define('DB_USER',   $db_user);
+    define('DB_HOST', $db_host);
+    define('DB_USER', $db_user);
     define('DB_PASSWD', $db_pw);
-    define('DB_NAME',   $db_name);
+    define('DB_NAME', $db_name);
     define('DB_PREFIX', $db_prefix);
 
     $DB = Database::getInstance();
     $CACHE = Cache::getInstance();
+
+    if ($DB->getMysqlVersion() < '5.5.3') {
+        emMsg('您的MySQL版本过低，请选用支持MySQL5.5及以上的环境安装emlog。');
+    }
 
     if ($act != 'reinstall' && $DB->num_rows($DB->query("SHOW TABLES LIKE '{$db_prefix}blog'")) == 1) {
         echo <<<EOT
@@ -257,12 +259,8 @@ EOT;
     $PHPASS = new PasswordHash(8, true);
     $adminpw = $PHPASS->HashPassword($adminpw);
 
-    $dbcharset = 'utf8';
-    $type = 'MYISAM';
-    $table_charset_sql = $DB->getMysqlVersion() > '4.1' ? 'ENGINE=' . $type . ' DEFAULT CHARSET=' . $dbcharset . ';' : 'ENGINE=' . $type . ';';
-    if ($DB->getMysqlVersion() > '4.1') {
-        $DB->query("ALTER DATABASE `{$db_name}` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;", true);
-    }
+    $table_charset_sql = 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;';
+    $DB->query("ALTER DATABASE `{$db_name}` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;", true);
 
     $widgets = Option::getWidgetTitle();
     $sider_wg = Option::getDefWidget();
@@ -394,9 +392,6 @@ INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('active_plug
 INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('widget_title','$widget_title');
 INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('custom_widget','a:0:{}');
 INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('widgets1','$widgets');
-INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('widgets2','');
-INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('widgets3','');
-INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('widgets4','');
 INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('detect_url','n');
 DROP TABLE IF EXISTS {$db_prefix}link;
 CREATE TABLE {$db_prefix}link (
@@ -486,7 +481,7 @@ CREATE TABLE {$db_prefix}storage (
         <p>您的emlog已经安装好了，现在可以开始您的创作了，就这么简单!</p>
         <p><b>用户名</b>：{$admin}</p>
         <p><b>密 码</b>：您刚才设定的密码</p>";
-    if (DEL_INSTALLER === 1 && !@unlink('./install.php') || DEL_INSTALLER === 0) {
+    if ((DEL_INSTALLER === 1 && !@unlink('./install.php')) || DEL_INSTALLER === 0) {
         $result .= '<p style="color:red;margin:10px 20px;">警告：请手动删除根目录下安装文件：install.php</p> ';
     }
     $result .= "<p style=\"text-align:right;\"><a href=\"./\">访问首页</a> | <a href=\"./admin/\">登录后台</a></p>";

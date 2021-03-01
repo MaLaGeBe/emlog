@@ -12,8 +12,6 @@ class Database
     {
         if (class_exists('mysqli', false)) {
             return MySqlii::getInstance();
-        } else if (class_exists('mysql', false)) {
-            return MySql::getInstance();
         } else {
             emMsg('服务器空间PHP不支持MySql数据库');
         }

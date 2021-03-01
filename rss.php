@@ -8,7 +8,7 @@ require_once './init.php';
 
 header('Content-type: application/xml');
 
-$sort = isset($_GET['sort']) ? intval($_GET['sort']) : '';
+$sort = isset($_GET['sort']) ? (int)$_GET['sort'] : '';
 
 $URL = BLOG_URL;
 $blog = getBlog($sort);
@@ -16,7 +16,7 @@ $blog = getBlog($sort);
 echo '<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
 <channel>
-<title><![CDATA[' . Option::get('blogname') . ']]></title>
+<title><![CDATA[' . Option::get('blogname') . ']]></title> 
 <description><![CDATA[' . Option::get('bloginfo') . ']]></description>
 <link>' . $URL . '</link>
 <language>zh-cn</language>
