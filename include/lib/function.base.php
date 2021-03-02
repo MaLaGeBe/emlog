@@ -173,7 +173,7 @@ function subString($strings, $start, $length)
     $str = substr($strings, $start, $length);
     $char = 0;
     for ($i = 0, $iMax = strlen($str); $i < $iMax; $i++) {
-        if (ord($str[$i]) >= 128)
+        if (ord($str[$i]) >= 128){
             $char++;
         }
 
