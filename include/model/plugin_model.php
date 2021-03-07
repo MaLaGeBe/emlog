@@ -16,7 +16,7 @@ class Plugin_Model
     }
 
     /**
-     * 激活插件
+     * 开启插件
      */
     public function activePlugin($plugin)
     {

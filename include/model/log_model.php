@@ -156,10 +156,10 @@ class Log_Model
         while ($row = $this->db->fetch_array($res)) {
             $row['date'] = date("Y-m-d H:i", $row['date']);
             $row['title'] = !empty($row['title']) ? htmlspecialchars($row['title']) : '无标题';
-            //$row['gid']     = $row['gid'];
-            //$row['comnum']     = $row['comnum'];
-            //$row['top']     = $row['top'];
-            //$row['attnum']     = $row['attnum'];
+            //$row['gid'] 	= $row['gid'];
+            //$row['comnum'] 	= $row['comnum'];
+            //$row['top'] 	= $row['top'];
+            //$row['attnum'] 	= $row['attnum'];
             $logs[] = $row;
         }
         return $logs;
@@ -173,7 +173,7 @@ class Log_Model
      * @param int $perPageNum
      * @return array
      */
-    public function getLogsForHome($perPageNum, $condition = '', $page = 1)
+    public function getLogsForHome(int $perPageNum, $condition = '', $page = 1)
     {
         $start_limit = !empty($page) ? ($page - 1) * $perPageNum : 0;
         $limit = $perPageNum ? "LIMIT $start_limit, $perPageNum" : '';
@@ -212,10 +212,10 @@ class Log_Model
         while ($row = $this->db->fetch_array($res)) {
             $row['date'] = date("Y-m-d H:i", $row['date']);
             $row['title'] = !empty($row['title']) ? htmlspecialchars($row['title']) : '无标题';
-            //$row['gid']     = $row['gid'];
-            //$row['comnum']     = $row['comnum'];
-            //$row['top']     = $row['top'];
-            //$row['attnum']     = $row['attnum'];
+            //$row['gid'] 	= $row['gid'];
+            //$row['comnum'] 	= $row['comnum'];
+            //$row['top'] 	= $row['top'];
+            //$row['attnum'] 	= $row['attnum'];
             $pages[] = $row;
         }
         return $pages;

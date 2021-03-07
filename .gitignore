@@ -5,6 +5,9 @@ config.php
 /content/cache/*.php
 /content/uploadfile/*
 /content/plugins/*
+/admin_new/*
+/admin_old/*
+/static/*
 # 开发工具文件
 .project
 .settings
