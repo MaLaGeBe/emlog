@@ -20,9 +20,6 @@
     </div>
     <form action="link.php?action=link_taxis" method="post">
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6  class="badge badge-secondary">已创建的链接</h6>
-            </div>
             <div class="card-body">
                 <table class="table table-bordered table-striped table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -30,7 +27,7 @@
                         <th>排序</th>
                         <th>链接</th>
                         <th>描述</th>
-                        <th>状态</th>
+                        <th>查看</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -41,22 +38,21 @@
                         ?>
                         <tr>
                             <td><input class="form-control em-small" name="link[<?php echo $value['id']; ?>]" value="<?php echo $value['taxis']; ?>" maxlength="4"/></td>
-                            <td><a href="<?php echo $value['siteurl']; ?>" target="_blank"><?php echo $value['sitename']; ?></a></td>
-                            <td><?php echo $value['description']; ?></td>
-                            <td>
-                                <?php if ($value['hide'] == 'n'): ?>
-                                    <a href="link.php?action=hide&amp;linkid=<?php echo $value['id']; ?>" title="点击隐藏链接">显示</a>
-                                <?php else: ?>
-                                    <a href="link.php?action=show&amp;linkid=<?php echo $value['id']; ?>" title="点击显示链接" style="color:red;">隐藏</a>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <a href="#" class="badge badge-primary" data-toggle="modal" data-target="#editModal"
+                            <td><a href="#" data-toggle="modal" data-target="#editModal"
                                    data-linkid="<?php echo $value['id']; ?>"
                                    data-sitename="<?php echo $value['sitename']; ?>"
                                    data-siteurl="<?php echo $value['siteurl']; ?>"
-                                   data-description="<?php echo $value['description']; ?>">编辑
-                                </a>
+                                   data-description="<?php echo $value['description']; ?>"><?php echo $value['sitename']; ?></a></td>
+                            <td><?php echo $value['description']; ?></td>
+                            <td>
+                                <a href="<?php echo $value['siteurl']; ?>" target="_blank"><img src="./views/images/vlog.gif" align="absbottom" border="0" /></a>
+                            </td>
+                            <td>
+                                <?php if ($value['hide'] == 'n'): ?>
+                                    <a href="link.php?action=hide&amp;linkid=<?php echo $value['id']; ?>" class="badge badge-primary">显示</a>
+                                <?php else: ?>
+                                    <a href="link.php?action=show&amp;linkid=<?php echo $value['id']; ?>" class="badge badge-warning">隐藏</a>
+                                <?php endif; ?>
                                 <a href="javascript: em_confirm(<?php echo $value['id']; ?>, 'link', '<?php echo LoginAuth::genToken(); ?>');" class="badge badge-danger">删除</a>
                             </td>
                         </tr>

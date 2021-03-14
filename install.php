@@ -2,7 +2,7 @@
 
 /**
  * 安装程序
- * @package EMLOG
+ * @package EMLOG (www.emlog.net)
  */
 
 define('EMLOG_ROOT', dirname(__FILE__));
@@ -341,7 +341,7 @@ option_value LONGTEXT NOT NULL ,
 PRIMARY KEY (option_id),
 KEY option_name (option_name)
 )" . $table_charset_sql . "
-INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('blogname','点滴记忆');
+INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('blogname','EMLOG');
 INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('bloginfo','使用emlog搭建的站点');
 INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('site_title','');
 INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('site_description','');

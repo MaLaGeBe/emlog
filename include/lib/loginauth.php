@@ -1,7 +1,7 @@
 <?php
 /**
  * 登录验证
- * @package EMLOG
+ * @package EMLOG (www.emlog.net)
  */
 
 class LoginAuth
@@ -35,60 +35,47 @@ class LoginAuth
 
     /**
      * 验证密码/用户
-     *
-     * @param string $username
-     * @param string $password
-     * @param string $imgcode
-     * @param string $logincode
      */
-    public static function checkUser($username, $password, $imgcode, $logincode = false)
+    public static function checkUser($username, $password, $imgcode)
     {
         session_start();
-        if (trim($username) == '' || trim($password) == '') {
+        if (empty($username) || empty($password)) {
             return false;
+        }
+        $sessionCode = $_SESSION['code'] ?? '';
+        if (Option::get('login_code') === 'y' && (empty($imgcode) || $imgcode != $sessionCode)) {
+            unset($_SESSION['code']);
+            return self::LOGIN_ERROR_AUTHCODE;
+        }
+        $userData = self::getUserDataByLogin($username);
+        if (false === $userData) {
+            return self::LOGIN_ERROR_USER;
+        }
+        $hash = $userData['password'];
+        if (true === self::checkPassword($password, $hash)) {
+            return true;
         } else {
-            $sessionCode = isset($_SESSION['code']) ? $_SESSION['code'] : '';
-            $logincode = false === $logincode ? Option::get('login_code') : $logincode;
-            if ($logincode == 'y' && (empty($imgcode) || $imgcode != $sessionCode)) {
-                return self::LOGIN_ERROR_AUTHCODE;
-            }
-            $userData = self::getUserDataByLogin($username);
-            if (false === $userData) {
-                return self::LOGIN_ERROR_USER;
-            }
-            $hash = $userData['password'];
-            if (true === self::checkPassword($password, $hash)) {
-                return true;
-            } else {
-                return self::LOGIN_ERROR_PASSWD;
-            }
+            return self::LOGIN_ERROR_PASSWD;
         }
     }
 
     /**
      * 登录页面
      */
-    public static function loginPage($errorCode = null)
+    public static function loginPage($errorCode = NULL)
     {
-        Option::get('login_code') == 'y' ?
-        $ckcode = "<span>验证码</span>
-        <div class=\"val\"><input name=\"imgcode\" id=\"imgcode\" type=\"text\" />
-        <img src=\"../include/lib/checkcode.php\" align=\"absmiddle\"></div>" :
-        $ckcode = '';
+        $ckcode = Option::get('login_code') == 'y' ? true : false;
         $error_msg = '';
-        if ($errorCode) {
-            switch ($errorCode) {
-                case self::LOGIN_ERROR_AUTHCODE:
-                    $error_msg = '验证错误，请重新输入';
-                    break;
-                case self::LOGIN_ERROR_USER:
-                    $error_msg = '用户名错误，请重新输入';
-                    break;
-                case self::LOGIN_ERROR_PASSWD:
-                    $error_msg = '密码错误，请重新输入';
-                    break;
-            }
+        switch ($errorCode) {
+            case self::LOGIN_ERROR_AUTHCODE:
+                $error_msg = '验证错误，请重新输入';
+                break;
+            case self::LOGIN_ERROR_USER:
+            case self::LOGIN_ERROR_PASSWD:
+                $error_msg = '用户或密码错误，请重新输入';
+                break;
         }
+
         require_once View::getView('login');
         View::output();
     }

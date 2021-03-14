@@ -26,9 +26,6 @@
     </div>
     <form method="post" action="sort.php?action=taxis">
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="badge badge-secondary">已创建的分类</h6>
-            </div>
             <div class="card-body">
                 <div class="table-responsive" id="adm_sort_list">
                     <table class="table table-bordered table-striped table-hover" id="dataTable" width="100%" cellspacing="0">
@@ -67,8 +64,7 @@
                                 </td>
                                 <td class="tdcenter"><a href="admin_log.php?sid=<?php echo $value['sid']; ?>"><?php echo $value['lognum']; ?></a></td>
                                 <td>
-                                    <a href="sort.php?action=mod_sort&sid=<?php echo $value['sid']; ?>">编辑</a>
-                                    <a href="javascript: em_confirm(<?php echo $value['sid']; ?>, 'sort', '<?php echo LoginAuth::genToken(); ?>');" class="care">删除</a>
+                                    <a href="javascript: em_confirm(<?php echo $value['sid']; ?>, 'sort', '<?php echo LoginAuth::genToken(); ?>');" class="badge badge-danger">删除</a>
                                 </td>
                             </tr>
                             <?php
@@ -90,8 +86,7 @@
                                     </td>
                                     <td class="tdcenter"><a href="admin_log.php?sid=<?php echo $value['sid']; ?>"><?php echo $value['lognum']; ?></a></td>
                                     <td>
-                                        <a href="sort.php?action=mod_sort&sid=<?php echo $value['sid']; ?>">编辑</a>
-                                        <a href="javascript: em_confirm(<?php echo $value['sid']; ?>, 'sort', '<?php echo LoginAuth::genToken(); ?>');" class="care">删除</a>
+                                        <a href="javascript: em_confirm(<?php echo $value['sid']; ?>, 'sort', '<?php echo LoginAuth::genToken(); ?>');" class="badge badge-danger">删除</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
