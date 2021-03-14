@@ -86,6 +86,8 @@ class Log_Controller
                 $site_title = $log_title . ' - ' . $site_title;
                 break;
         }
+        $Parsedown = new Parsedown();
+        $log_content = $Parsedown->text($log_content);
         $site_description = extractHtmlData($log_content, 90);
         $log_cache_tags = $CACHE->readCache('logtags');
         if (!empty($log_cache_tags[$logid])) {
@@ -104,8 +106,6 @@ class Log_Controller
         if ($type == 'blog') {
             $Log_Model->updateViewCount($logid);
             $neighborLog = $Log_Model->neighborLog($timestamp);
-            $tb = array();
-            $tb_url = ''; //兼容未删除引用模板
             include View::getView('echo_log');
         } elseif ($type == 'page') {
             $template = !empty($template) && file_exists(TEMPLATE_PATH . $template . '.php') ? $template : 'page';

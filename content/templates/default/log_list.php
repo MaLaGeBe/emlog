@@ -10,7 +10,9 @@ if (!defined('EMLOG_ROOT')) {
     <div class="col-md-7 content">
         <?php
         if (!empty($logs)):
+            $Parsedown = new Parsedown();
             foreach ($logs as $value):
+                $value['log_description'] = $Parsedown->text($value['log_description']);
                 ?>
                 <h3><a href="<?php echo $value['log_url']; ?>"><?php echo $value['log_title']; ?></a><?php topflg($value['top'], $value['sortop'], isset($sortid) ? $sortid : ''); ?></h3>
                 <p class="date"><?php echo gmdate('Y-n-j', $value['date']); ?><?php blog_author($value['author']); ?>

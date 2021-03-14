@@ -15,7 +15,7 @@ for ($i = 0; $i < 5; $i++) {
 $_SESSION['code'] = strtoupper($randCode);
 
 $img = imagecreate(70, 22);
-$bgColor = isset($_GET['mode']) && $_GET['mode'] == 't' ? imagecolorallocate($img, 245, 245, 245) : imagecolorallocate($img, 255, 255, 255);
+$bgColor = isset($_GET['mode']) && $_GET['mode'] == 't' ? imagecolorallocatealpha($img, 245, 245, 245, 127) : imagecolorallocate($img, 255, 255, 255);
 $pixColor = imagecolorallocate($img, mt_rand(30, 180), mt_rand(10, 100), mt_rand(40, 250));
 
 for ($i = 0; $i < 5; $i++) {
