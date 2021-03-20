@@ -25,11 +25,8 @@
 </head>
 <div id="wrapper">
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./">
-            <div class="sidebar-brand-icon rotate-n-15">
-                <i class="fas fa-laugh-wink"></i>
-            </div>
-            <div class="sidebar-brand-text mx-3">emlog <sup><?php echo Option::EMLOG_VERSION ?></sup></div>
+        <a class="sidebar-brand d-flex align-items-center" href="./">
+            <div class="sidebar-brand-text mx-3">EMLOG Pro</div>
         </a>
 
         <hr class="sidebar-divider my-0">
@@ -59,7 +56,7 @@
         </li>
 
         <li class="nav-item" id="menu_media">
-            <a class="nav-link" href="media.php"><i class="fas fa-sticky-note"></i><span>资源</span></a>
+            <a class="nav-link" href="media.php"><i class="fas fa-image"></i><span>资源</span></a>
         </li>
 
         <li class="nav-item" id="menu_cm">
@@ -133,8 +130,9 @@
                     <div class="topbar-divider d-none d-sm-block"></div>
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $user_cache[UID]['name']  ?></span>
-                            <img class="img-profile rounded-circle" src="<?php echo empty($user_cache[UID]['avatar']) ? './views/images/avatar.svg' : '../' . $user_cache[UID]['avatar'] ?>">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $user_cache[UID]['name'] ?></span>
+                            <img class="img-profile rounded-circle"
+                                 src="<?php echo empty($user_cache[UID]['avatar']) ? './views/images/avatar.svg' : '../' . $user_cache[UID]['avatar'] ?>">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="blogger.php">
@@ -148,3 +146,4 @@
                     </li>
                 </ul>
             </nav>
+            <div class="container-fluid">
