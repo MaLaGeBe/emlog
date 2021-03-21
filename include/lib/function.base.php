@@ -283,7 +283,6 @@ function pagination($count, $perlogs, $page, $url, $anchor = '')
         $re .= "<em> ... </em> <a href=\"$url$pnums$anchor\" title=\"尾页\">&raquo;</a>";
     if ($pnums <= 1)
         $re = '';
-    }
 
     return $re;
 }
