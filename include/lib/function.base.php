@@ -853,7 +853,7 @@ function emFecthFile($source)
  */
 function emDeleteFile($file)
 {
-    if (empty($file))
+    if (empty($file)){
         return false;
     }
 
@@ -864,14 +864,8 @@ function emDeleteFile($file)
     $ret = true;
     if ($handle = @opendir($file)) {
         while ($filename = @readdir($handle)) {
-            if ($filename == '.' || $filename == '..') {
-                continue;
-            }
-
-            if (!emDeleteFile($file . '/' . $filename)) {
-                $ret = false;
-            }
-
+            if ($filename == '.' || $filename == '..') continue;
+            if (!emDeleteFile($file . '/' . $filename)) $ret = false;
         }
     } else {
         $ret = false;
