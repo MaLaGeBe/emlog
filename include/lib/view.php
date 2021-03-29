@@ -14,13 +14,12 @@ class View
         return TEMPLATE_PATH . $template . $ext;
     }
 
-    public static function output()
-    {
-        $content = ob_get_clean();
-        ob_start();
-        echo $content;
-        ob_end_flush();
-        exit;
-    }
+	public static function output() {
+		$content = ob_get_clean();
+		ob_start();
+		echo $content;
+		ob_end_flush();
+		exit;
+	}
 
 }

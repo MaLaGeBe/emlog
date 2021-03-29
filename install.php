@@ -5,20 +5,20 @@
  * @package EMLOG (www.emlog.net)
  */
 
-define('EMLOG_ROOT', dirname(__FILE__));
+define('EMLOG_ROOT', __DIR__);
 define('DEL_INSTALLER', 0);
 require_once EMLOG_ROOT . '/include/lib/function.base.php';
 header('Content-Type: text/html; charset=UTF-8');
 spl_autoload_register("emAutoload");
 
 if (PHP_VERSION < '7.0') {
-    emMsg('您的php版本过低，请选用支持PHP7及以上的环境安装emlog。');
+	emMsg('您的php版本过低，请选用支持PHP7及以上的环境安装emlog。');
 }
 
 $act = $_GET['action'] ?? '';
 
 if (!$act) {
-    ?>
+	?>
     <!doctype html>
     <html lang="zh-cn">
     <head>
@@ -33,6 +33,7 @@ if (!$act) {
                 font-size: 12px;
                 line-height: 150%;
             }
+
             .main {
                 background-color: #FFFFFF;
                 font-size: 12px;
@@ -44,15 +45,18 @@ if (!$act) {
                 border: #DFDFDF 1px solid;
                 border-radius: 4px;
             }
+
             .logo {
                 background: url(admin/views/images/logo.gif) no-repeat center;
                 padding: 30px 0px 30px 0px;
                 margin: 30px 0px;
             }
+
             .title {
                 text-align: center;
                 font-size: 14px;
             }
+
             .input {
                 border: 1px solid #CCCCCC;
                 font-family: Arial;
@@ -62,14 +66,17 @@ if (!$act) {
                 color: #666666;
                 margin: 0px 0px 0px 25px;
             }
+
             .submit {
                 cursor: pointer;
                 font-size: 12px;
                 padding: 4px 10px;
             }
+
             .care {
                 color: #0066CC;
             }
+
             .title2 {
                 font-size: 18px;
                 color: #666666;
@@ -77,12 +84,15 @@ if (!$act) {
                 margin: 40px 0px 20px 0px;
                 padding: 10px 0px;
             }
+
             .foot {
                 text-align: center;
             }
+
             .main li {
                 margin: 20px 0px;
             }
+
             -->
         </style>
     </head>
@@ -138,47 +148,47 @@ if (!$act) {
     </form>
     </body>
     </html>
-    <?php
+	<?php
 }
 if ($act == 'install' || $act == 'reinstall') {
-    $db_host = isset($_POST['hostname']) ? addslashes(trim($_POST['hostname'])) : '';
-    $db_user = isset($_POST['dbuser']) ? addslashes(trim($_POST['dbuser'])) : '';
-    $db_pw = isset($_POST['password']) ? addslashes(trim($_POST['password'])) : '';
-    $db_name = isset($_POST['dbname']) ? addslashes(trim($_POST['dbname'])) : '';
-    $db_prefix = isset($_POST['dbprefix']) ? addslashes(trim($_POST['dbprefix'])) : '';
-    $admin = isset($_POST['admin']) ? addslashes(trim($_POST['admin'])) : '';
-    $adminpw = isset($_POST['adminpw']) ? addslashes(trim($_POST['adminpw'])) : '';
-    $adminpw2 = isset($_POST['adminpw2']) ? addslashes(trim($_POST['adminpw2'])) : '';
-    $result = '';
+	$db_host = isset($_POST['hostname']) ? addslashes(trim($_POST['hostname'])) : '';
+	$db_user = isset($_POST['dbuser']) ? addslashes(trim($_POST['dbuser'])) : '';
+	$db_pw = isset($_POST['password']) ? addslashes(trim($_POST['password'])) : '';
+	$db_name = isset($_POST['dbname']) ? addslashes(trim($_POST['dbname'])) : '';
+	$db_prefix = isset($_POST['dbprefix']) ? addslashes(trim($_POST['dbprefix'])) : '';
+	$admin = isset($_POST['admin']) ? addslashes(trim($_POST['admin'])) : '';
+	$adminpw = isset($_POST['adminpw']) ? addslashes(trim($_POST['adminpw'])) : '';
+	$adminpw2 = isset($_POST['adminpw2']) ? addslashes(trim($_POST['adminpw2'])) : '';
+	$result = '';
 
-    if ($db_prefix == '') {
-        emMsg('数据库表前缀不能为空!');
-    } elseif (!preg_match("/^[\w_]+_$/", $db_prefix)) {
-        emMsg('数据库表前缀格式错误!');
-    } elseif ($admin == '' || $adminpw == '') {
-        emMsg('登录名和密码不能为空!');
-    } elseif (strlen($adminpw) < 6) {
-        emMsg('登录密码不得小于6位');
-    } elseif ($adminpw != $adminpw2) {
-        emMsg('两次输入的密码不一致');
-    }
+	if ($db_prefix == '') {
+		emMsg('数据库表前缀不能为空!');
+	} elseif (!preg_match("/^[\w_]+_$/", $db_prefix)) {
+		emMsg('数据库表前缀格式错误!');
+	} elseif ($admin == '' || $adminpw == '') {
+		emMsg('登录名和密码不能为空!');
+	} elseif (strlen($adminpw) < 6) {
+		emMsg('登录密码不得小于6位');
+	} elseif ($adminpw != $adminpw2) {
+		emMsg('两次输入的密码不一致');
+	}
 
-    //初始化数据库类
-    define('DB_HOST', $db_host);
-    define('DB_USER', $db_user);
-    define('DB_PASSWD', $db_pw);
-    define('DB_NAME', $db_name);
-    define('DB_PREFIX', $db_prefix);
+	//初始化数据库类
+	define('DB_HOST', $db_host);
+	define('DB_USER', $db_user);
+	define('DB_PASSWD', $db_pw);
+	define('DB_NAME', $db_name);
+	define('DB_PREFIX', $db_prefix);
 
-    $DB = Database::getInstance();
-    $CACHE = Cache::getInstance();
+	$DB = Database::getInstance();
+	$CACHE = Cache::getInstance();
 
-    if ($DB->getMysqlVersion() < '5.5.3') {
-        emMsg('您的MySQL版本过低，请选用支持MySQL5.5及以上的环境安装emlog。');
-    }
+	if ($DB->getMysqlVersion() < '5.5.3') {
+		emMsg('您的MySQL版本过低，请选用支持MySQL5.5及以上的环境安装emlog。');
+	}
 
-    if ($act != 'reinstall' && $DB->num_rows($DB->query("SHOW TABLES LIKE '{$db_prefix}blog'")) == 1) {
-        echo <<<EOT
+	if ($act != 'reinstall' && $DB->num_rows($DB->query("SHOW TABLES LIKE '{$db_prefix}blog'")) == 1) {
+		echo <<<EOT
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -211,55 +221,55 @@ body {background-color:#F7F7F7;font-family: Arial;font-size: 12px;line-height:15
 </body>
 </html>
 EOT;
-        exit;
-    }
+		exit;
+	}
 
-    if (!is_writable('config.php')) {
-        emMsg('配置文件(config.php)不可写。如果您使用的是Unix/Linux主机，请修改该文件的权限为777。如果您使用的是Windows主机，请联系管理员，将此文件设为可写');
-    }
-    if (!is_writable(EMLOG_ROOT . '/content/cache')) {
-        emMsg('缓存文件不可写。如果您使用的是Unix/Linux主机，请修改缓存目录 (content/cache) 下所有文件的权限为777。如果您使用的是Windows主机，请联系管理员，将该目录下所有文件设为可写');
-    }
-    $config = "<?php\n"
-        . "//mysql database address\n"
-        . "define('DB_HOST','$db_host');"
-        . "\n//mysql database user\n"
-        . "define('DB_USER','$db_user');"
-        . "\n//database password\n"
-        . "define('DB_PASSWD','$db_pw');"
-        . "\n//database name\n"
-        . "define('DB_NAME','$db_name');"
-        . "\n//database prefix\n"
-        . "define('DB_PREFIX','$db_prefix');"
-        . "\n//auth key\n"
-        . "define('AUTH_KEY','" . getRandStr(32) . md5($_SERVER['HTTP_USER_AGENT']) . "');"
-        . "\n//cookie name\n"
-        . "define('AUTH_COOKIE_NAME','EM_AUTHCOOKIE_" . getRandStr(32, false) . "');"
-        . "\n";
+	if (!is_writable('config.php')) {
+		emMsg('配置文件(config.php)不可写。如果您使用的是Unix/Linux主机，请修改该文件的权限为777。如果您使用的是Windows主机，请联系管理员，将此文件设为可写');
+	}
+	if (!is_writable(EMLOG_ROOT . '/content/cache')) {
+		emMsg('缓存文件不可写。如果您使用的是Unix/Linux主机，请修改缓存目录 (content/cache) 下所有文件的权限为777。如果您使用的是Windows主机，请联系管理员，将该目录下所有文件设为可写');
+	}
+	$config = "<?php\n"
+		. "//mysql database address\n"
+		. "define('DB_HOST','$db_host');"
+		. "\n//mysql database user\n"
+		. "define('DB_USER','$db_user');"
+		. "\n//database password\n"
+		. "define('DB_PASSWD','$db_pw');"
+		. "\n//database name\n"
+		. "define('DB_NAME','$db_name');"
+		. "\n//database prefix\n"
+		. "define('DB_PREFIX','$db_prefix');"
+		. "\n//auth key\n"
+		. "define('AUTH_KEY','" . getRandStr(32) . md5($_SERVER['HTTP_USER_AGENT']) . "');"
+		. "\n//cookie name\n"
+		. "define('AUTH_COOKIE_NAME','EM_AUTHCOOKIE_" . getRandStr(32, false) . "');"
+		. "\n";
 
-    $fp = @fopen('config.php', 'w');
-    $fw = @fwrite($fp, $config);
-    if (!$fw) {
-        emMsg('配置文件(config.php)不可写。如果您使用的是Unix/Linux主机，请修改该文件的权限为777。如果您使用的是Windows主机，请联系管理员，将此文件设为可写');
-    }
-    fclose($fp);
+	$fp = @fopen('config.php', 'w');
+	$fw = @fwrite($fp, $config);
+	if (!$fw) {
+		emMsg('配置文件(config.php)不可写。如果您使用的是Unix/Linux主机，请修改该文件的权限为777。如果您使用的是Windows主机，请联系管理员，将此文件设为可写');
+	}
+	fclose($fp);
 
-    //密码加密存储
-    $PHPASS = new PasswordHash(8, true);
-    $adminpw = $PHPASS->HashPassword($adminpw);
+	//密码加密存储
+	$PHPASS = new PasswordHash(8, true);
+	$adminpw = $PHPASS->HashPassword($adminpw);
 
-    $table_charset_sql = 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;';
-    $DB->query("ALTER DATABASE `{$db_name}` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;", true);
+	$table_charset_sql = 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;';
+	$DB->query("ALTER DATABASE `{$db_name}` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;", true);
 
-    $widgets = Option::getWidgetTitle();
-    $sider_wg = Option::getDefWidget();
+	$widgets = Option::getWidgetTitle();
+	$sider_wg = Option::getDefWidget();
 
-    $widget_title = serialize($widgets);
-    $widgets = serialize($sider_wg);
+	$widget_title = serialize($widgets);
+	$widgets = serialize($sider_wg);
 
-    define('BLOG_URL', realUrl());
+	define('BLOG_URL', realUrl());
 
-    $sql = "
+	$sql = "
 DROP TABLE IF EXISTS {$db_prefix}blog;
 CREATE TABLE {$db_prefix}blog (
   gid int(10) unsigned NOT NULL auto_increment,
@@ -382,6 +392,7 @@ INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('widget_titl
 INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('custom_widget','a:0:{}');
 INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('widgets1','$widgets');
 INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('detect_url','n');
+INSERT INTO {$db_prefix}options (option_name, option_value) VALUES ('emkey','');
 DROP TABLE IF EXISTS {$db_prefix}link;
 CREATE TABLE {$db_prefix}link (
   id int(10) unsigned NOT NULL auto_increment,
@@ -456,24 +467,24 @@ CREATE TABLE {$db_prefix}storage (
   UNIQUE KEY `plugin` (`plugin`,`name`)
 )" . $table_charset_sql;
 
-    $array_sql = preg_split("/;[\r\n]/", $sql);
-    foreach ($array_sql as $sql) {
-        $sql = trim($sql);
-        if ($sql) {
-            $DB->query($sql);
-        }
-    }
-    //重建缓存
-    $CACHE->updateCache();
-    $result .= "
+	$array_sql = preg_split("/;[\r\n]/", $sql);
+	foreach ($array_sql as $sql) {
+		$sql = trim($sql);
+		if ($sql) {
+			$DB->query($sql);
+		}
+	}
+	//重建缓存
+	$CACHE->updateCache();
+	$result .= "
         <p style=\"font-size:24px; border-bottom:1px solid #E6E6E6; padding:10px 0px;\">恭喜，安装成功！</p>
         <p>您的emlog已经安装好了，现在可以开始您的创作了，就这么简单!</p>
         <p><b>用户名</b>：{$admin}</p>
         <p><b>密 码</b>：您刚才设定的密码</p>";
-    if ((DEL_INSTALLER === 1 && !@unlink('./install.php')) || DEL_INSTALLER === 0) {
-        $result .= '<p style="color:red;margin:10px 20px;">警告：请手动删除根目录下安装文件：install.php</p> ';
-    }
-    $result .= "<p style=\"text-align:right;\"><a href=\"./\">访问首页</a> | <a href=\"./admin/\">登录后台</a></p>";
-    emMsg($result, 'none');
+	if ((DEL_INSTALLER === 1 && !@unlink('./install.php')) || DEL_INSTALLER === 0) {
+		$result .= '<p style="color:red;margin:10px 20px;">警告：请手动删除根目录下安装文件：install.php</p> ';
+	}
+	$result .= "<p style=\"text-align:right;\"><a href=\"./\">访问首页</a> | <a href=\"./admin/\">登录后台</a></p>";
+	emMsg($result, 'none');
 }
 ?>

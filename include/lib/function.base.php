@@ -65,7 +65,7 @@ function getBlogUrl()
  */
 function realUrl()
 {
-    static $real_url = null;
+    static $real_url = NULL;
 
     if ($real_url !== null) {
         return $real_url;
@@ -234,13 +234,13 @@ function extractHtmlData($data, $len)
 function changeFileSize($fileSize)
 {
     if ($fileSize >= 1073741824) {
-        $fileSize = round($fileSize / 1073741824, 2) . 'GB';
+        $fileSize = round($fileSize / 1073741824, 2) . ' GB';
     } elseif ($fileSize >= 1048576) {
-        $fileSize = round($fileSize / 1048576, 2) . 'MB';
+        $fileSize = round($fileSize / 1048576, 2) . ' MB';
     } elseif ($fileSize >= 1024) {
-        $fileSize = round($fileSize / 1024, 2) . 'KB';
+        $fileSize = round($fileSize / 1024, 2) . ' KB';
     } else {
-        $fileSize = $fileSize . '字节';
+        $fileSize .= ' 字节';
     }
     return $fileSize;
 }
@@ -260,6 +260,7 @@ function getFileSuffix($fileName)
  * @param int $perlogs 每页显示条数目
  * @param int $page 当前页码
  * @param string $url 页码的地址
+ * @return string
  */
 function pagination($count, $perlogs, $page, $url, $anchor = '')
 {
@@ -294,7 +295,8 @@ function pagination($count, $perlogs, $page, $url, $anchor = '')
  * @param string $actionFunc
  * @return boolearn
  */
-function addAction($hook, $actionFunc) {
+function addAction($hook, $actionFunc)
+{
     // 通过全局变量来存储挂载点上挂载的插件函数
     global $emHooks;
     if (!isset($emHooks[$hook]) || !in_array($actionFunc, $emHooks[$hook])) {
@@ -727,8 +729,8 @@ function getTimeZoneOffset($remote_tz, $origin_tz = 'UTC')
  */
 function getMonthDayNum($month, $year)
 {
-    $month = (int) $month;
-    $year = (int) $year;
+    $month = (int)$month;
+    $year = (int)$year;
 
     $months_map = array(1 => 31, 3 => 31, 4 => 30, 5 => 31, 6 => 30, 7 => 31, 8 => 31, 9 => 30, 10 => 31, 11 => 30, 12 => 31);
     if (array_key_exists($month, $months_map)) {
@@ -757,8 +759,8 @@ function getMonthDayNum($month, $year)
  */
 function emUnZip($zipfile, $path, $type = 'tpl')
 {
-    if (!class_exists('ZipArchive', false)) {
-        return 3; //zip模块问题
+    if (!class_exists('ZipArchive', FALSE)) {
+        return 3;//zip模块问题
     }
     $zip = new ZipArchive();
     if (@$zip->open($zipfile) !== true) {
@@ -805,7 +807,7 @@ function emUnZip($zipfile, $path, $type = 'tpl')
  */
 function emZip($orig_fname, $content)
 {
-    if (!class_exists('ZipArchive', false)) {
+    if (!class_exists('ZipArchive', FALSE)) {
         return false;
     }
     $zip = new ZipArchive();
@@ -833,7 +835,7 @@ function emFecthFile($source)
     $rh = fopen($source, 'rb');
     $wh = fopen($temp_file, 'w+b');
     if (!$rh || !$wh) {
-        return false;
+        return FALSE;
     }
 
     while (!feof($rh)) {
@@ -851,7 +853,7 @@ function emFecthFile($source)
  */
 function emDeleteFile($file)
 {
-    if (empty($file)) {
+    if (empty($file))
         return false;
     }
 
@@ -981,10 +983,8 @@ function emoFormat($t)
     if (!empty($t) && preg_match_all('/\[.+?\]/', $t, $matches)) {
         $matches = array_unique($matches[0]);
         foreach ($matches as $data) {
-            if (isset($emos[$data])) {
+            if (isset($emos[$data]))
                 $t = str_replace($data, '<img title="' . $data . '" src="' . BLOG_URL . 'admin/editor/plugins/emoticons/images/' . $emos[$data] . '"/>', $t);
-            }
-
         }
     }
     return $t;

@@ -9,7 +9,7 @@ session_start();
 $randCode = '';
 $chars = 'abcdefghijkmnpqrstuvwxyzABCDEFGHIJKLMNPRSTUVWXYZ23456789';
 for ($i = 0; $i < 5; $i++) {
-    $randCode .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+	$randCode .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
 }
 
 $_SESSION['code'] = strtoupper($randCode);

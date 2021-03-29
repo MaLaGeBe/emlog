@@ -1,6 +1,6 @@
 <?php
 /**
- * 评论管理
+ * commment model
  * @package EMLOG (www.emlog.net)
  */
 
@@ -9,13 +9,13 @@ class Comment_Model
 
     private $db;
 
-    public function __construct()
+    function __construct()
     {
         $this->db = Database::getInstance();
     }
 
     /**
-     * 获取评论
+     * get comment list
      *
      * @param int $spot 0：前台 1：后台 2: 手机
      * @param int $blogId
@@ -23,7 +23,7 @@ class Comment_Model
      * @param int $page
      * @return array
      */
-    public function getComments($spot = 0, $blogId = null, $hide = null, $page = null)
+    function getComments($spot = 0, $blogId = null, $hide = null, $page = null)
     {
         $andQuery = '1=1';
         $andQuery .= $blogId ? " and a.gid=$blogId" : '';
@@ -52,13 +52,7 @@ class Comment_Model
             $row['content'] = htmlClean($row['comment']);
             $row['date'] = smartDate($row['date']);
             $row['children'] = array();
-            if ($spot == 0) {
-                $row['level'] = isset($comments[$row['pid']]) ? $comments[$row['pid']]['level'] + 1 : 0;
-            }
-
-            //$row['hide'];
-            //$row['title'];
-            //$row['gid'];
+            if ($spot == 0) $row['level'] = isset($comments[$row['pid']]) ? $comments[$row['pid']]['level'] + 1 : 0;
             $comments[$row['cid']] = $row;
         }
         if ($spot == 0) {
@@ -108,7 +102,7 @@ class Comment_Model
         return $comments;
     }
 
-    public function getOneComment($commentId, $nl2br = false)
+    function getOneComment($commentId, $nl2br = false)
     {
         $sql = "select * from " . DB_PREFIX . "comment where cid=$commentId";
         $res = $this->db->query($sql);
@@ -122,7 +116,7 @@ class Comment_Model
         return $commentArray;
     }
 
-    public function getCommentNum($blogId = null, $hide = null)
+    function getCommentNum($blogId = null, $hide = null)
     {
         $comNum = '';
         $andQuery = '1=1';
@@ -138,7 +132,7 @@ class Comment_Model
         return $comNum;
     }
 
-    public function delComment($commentId)
+    function delComment($commentId)
     {
         $this->isYoursComment($commentId);
         $row = $this->db->once_fetch_array("SELECT gid FROM " . DB_PREFIX . "comment WHERE cid=$commentId");
@@ -156,7 +150,7 @@ class Comment_Model
         $this->updateCommentNum($blogId);
     }
 
-    public function delCommentByIp($ip)
+    function delCommentByIp($ip)
     {
         $blogids = array();
         $sql = "SELECT DISTINCT gid FROM " . DB_PREFIX . "comment WHERE ip='$ip'";
@@ -168,7 +162,7 @@ class Comment_Model
         $this->updateCommentNum($blogids);
     }
 
-    public function hideComment($commentId)
+    function hideComment($commentId)
     {
         $this->isYoursComment($commentId);
         $row = $this->db->once_fetch_array("SELECT gid FROM " . DB_PREFIX . "comment WHERE cid=$commentId");
@@ -186,7 +180,7 @@ class Comment_Model
         $this->updateCommentNum($blogId);
     }
 
-    public function showComment($commentId)
+    function showComment($commentId)
     {
         $this->isYoursComment($commentId);
         $row = $this->db->once_fetch_array("SELECT gid,pid FROM " . DB_PREFIX . "comment WHERE cid=$commentId");
@@ -203,7 +197,7 @@ class Comment_Model
         $this->updateCommentNum($blogId);
     }
 
-    public function replyComment($blogId, $pid, $content, $hide)
+    function replyComment($blogId, $pid, $content, $hide)
     {
         $CACHE = Cache::getInstance();
         $user_cache = $CACHE->readCache('user');
@@ -223,7 +217,7 @@ class Comment_Model
         }
     }
 
-    public function batchComment($action, $comments)
+    function batchComment($action, $comments)
     {
         switch ($action) {
             case 'delcom':
@@ -244,7 +238,7 @@ class Comment_Model
         }
     }
 
-    public function updateCommentNum($blogId)
+    function updateCommentNum($blogId)
     {
         if (is_array($blogId)) {
             foreach ($blogId as $val) {
@@ -259,7 +253,7 @@ class Comment_Model
         }
     }
 
-    public function addComment($name, $content, $mail, $url, $imgcode, $blogId, $pid)
+    function addComment($name, $content, $mail, $url, $imgcode, $blogId, $pid)
     {
         $ipaddr = getIp();
         $utctimestamp = time();
@@ -290,7 +284,7 @@ class Comment_Model
         }
     }
 
-    public function updateComment($commentData, $commentId)
+    function updateComment($commentData, $commentId)
     {
         $this->isYoursComment($commentId);
         $Item = array();
@@ -301,7 +295,7 @@ class Comment_Model
         $this->db->query("UPDATE " . DB_PREFIX . "comment SET $upStr WHERE cid=$commentId");
     }
 
-    public function isCommentExist($blogId, $name, $content)
+    function isCommentExist($blogId, $name, $content)
     {
         $data = $this->db->once_fetch_array("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "comment WHERE gid=$blogId AND poster='$name' AND comment='$content'");
         if ($data['total'] > 0) {
@@ -311,7 +305,7 @@ class Comment_Model
         }
     }
 
-    public function isYoursComment($cid)
+    function isYoursComment($cid)
     {
         if (ROLE == ROLE_ADMIN || ROLE == ROLE_VISITOR) {
             return true;
@@ -323,7 +317,7 @@ class Comment_Model
         }
     }
 
-    public function isNameAndMailValid($name, $mail)
+    function isNameAndMailValid($name, $mail)
     {
         $CACHE = Cache::getInstance();
         $user_cache = $CACHE->readCache('user');
@@ -335,7 +329,7 @@ class Comment_Model
         return true;
     }
 
-    public function isLogCanComment($blogId)
+    function isLogCanComment($blogId)
     {
         if (Option::get('iscomment') == 'n') {
             return false;
@@ -349,7 +343,7 @@ class Comment_Model
         }
     }
 
-    public function isCommentTooFast()
+    function isCommentTooFast()
     {
         $ipaddr = getIp();
         $utctimestamp = time() - Option::get('comment_interval');
@@ -361,7 +355,7 @@ class Comment_Model
         return intval($row['num']) > 0 ? true : false;
     }
 
-    public function setCommentCookie($name, $mail, $url)
+    function setCommentCookie($name, $mail, $url)
     {
         $cookietime = time() + 31536000;
         setcookie('commentposter', $name, $cookietime);
