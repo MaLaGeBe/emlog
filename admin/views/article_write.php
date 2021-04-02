@@ -1,8 +1,8 @@
 <?php if (!defined('EMLOG_ROOT')) {
-    exit('error!');
+	exit('error!');
 } ?>
 <h1 class="h3 mb-4 text-gray-800"><?php echo $containertitle; ?></h1>
-<form action="save_log.php?action=add" method="post" enctype="multipart/form-data" id="addlog" name="addlog">
+<form action="article_save.php?action=add" method="post" enctype="multipart/form-data" id="addlog" name="addlog">
     <!--文章内容-->
     <div class="row">
         <div class="col-xl-8">
@@ -13,10 +13,10 @@
                 </div>
                 <div id="post_bar">
                     <a href="#" class="text-muted small my-3" data-toggle="modal" data-target="#addModal"><i class="icofont-plus"></i> 上传文件\图片</a>
-                    <div id="FrameUpload" style="display: none;">
-                        <iframe width="100%" height="330" frameborder="0" src="<?php echo $att_frame_url; ?>"></iframe>
-                    </div>
                 </div>
+				<?php doAction('adm_writelog_head'); ?>
+                <span id="asmsg"></span>
+                <input type="hidden" name="as_logid" id="as_logid" value="<?php echo $logid; ?>">
                 <textarea id="logcontent" name="logcontent""><?php echo $content; ?></textarea>
                 <div class="show_advset" onclick="displayToggle('advset', 1);">文章摘要<i class="icofont-simple-right"></i></div>
                 <div id="advset">
@@ -32,25 +32,25 @@
                     <div class="form-group">
                         <select name="sort" id="sort" class="form-control">
                             <option value="-1">选择分类...</option>
-                            <?php
-                            foreach ($sorts as $key => $value):
-                                if ($value['pid'] != 0) {
-                                    continue;
-                                }
-                                $flg = $value['sid'] == $sortid ? 'selected' : '';
-                                ?>
+							<?php
+							foreach ($sorts as $key => $value):
+								if ($value['pid'] != 0) {
+									continue;
+								}
+								$flg = $value['sid'] == $sortid ? 'selected' : '';
+								?>
                                 <option value="<?php echo $value['sid']; ?>" <?php echo $flg; ?>><?php echo $value['sortname']; ?></option>
-                                <?php
-                                $children = $value['children'];
-                                foreach ($children as $key):
-                                    $value = $sorts[$key];
-                                    $flg = $value['sid'] == $sortid ? 'selected' : '';
-                                    ?>
+								<?php
+								$children = $value['children'];
+								foreach ($children as $key):
+									$value = $sorts[$key];
+									$flg = $value['sid'] == $sortid ? 'selected' : '';
+									?>
                                     <option value="<?php echo $value['sid']; ?>" <?php echo $flg; ?>>&nbsp; &nbsp; &nbsp; <?php echo $value['sortname']; ?></option>
-                                <?php
-                                endforeach;
-                            endforeach;
-                            ?>
+								<?php
+								endforeach;
+							endforeach;
+							?>
                         </select>
                     </div>
 
@@ -91,16 +91,16 @@
                 <input type="hidden" name="gid" value=<?php echo $logid; ?>/>
                 <input type="hidden" name="author" id="author" value=<?php echo $author; ?>/>
 
-                <?php if ($logid < 0): ?>
+				<?php if ($logid < 0): ?>
                     <input type="submit" value="发布文章" onclick="return checkform();" class="btn btn-success"/>
                     <input type="button" name="savedf" id="savedf" value="保存草稿" onclick="autosave(2);" class="btn btn-success"/>
-                <?php else: ?>
+				<?php else: ?>
                     <input type="submit" value="保存并返回" onclick="return checkform();" class="btn btn-success"/>
                     <input type="button" name="savedf" id="savedf" value="保存" onclick="autosave(2);" class="btn btn-success"/>
-                    <?php if ($isdraft) : ?>
+					<?php if ($isdraft) : ?>
                         <input type="submit" name="pubdf" id="pubdf" value="发布" onclick="return checkform();" class="btn btn-success"/>
-                    <?php endif; ?>
-                <?php endif; ?>
+					<?php endif; ?>
+				<?php endif; ?>
             </div>
         </div>
     </div>

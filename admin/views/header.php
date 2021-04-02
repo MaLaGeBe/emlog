@@ -1,5 +1,5 @@
 <?php if (!defined('EMLOG_ROOT')) {
-    exit('error!');
+	exit('error!');
 } ?>
 <!doctype html>
 <html lang="zh-cn">
@@ -8,18 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>管理中心 - <?php echo Option::get('blogname'); ?></title>
-    <!-- CSS -->
     <link href="./views/css/bootstrap-sbadmin-4.5.3.css" rel="stylesheet">
     <link href="./views/css/css-main.css" type=text/css rel=stylesheet>
     <link href="./views/css/icofont/icofont.min.css" type=text/css rel=stylesheet>
     <link href="./views/css/dropzone.css" type=text/css rel=stylesheet>
-    <!-- JS -->
+
     <script src="./views/js/jquery.min.3.5.1.js"></script>
     <script src="./views/js/bootstrap.bundle.min.4.6.js"></script>
     <script src="./views/js/jquery-ui.min.js"></script>
     <script src="./views/js/ckeditor.js"></script>
     <script src="./views/js/common.js"></script>
-    <?php doAction('adm_head'); ?>
+	<?php doAction('adm_head'); ?>
 </head>
 <div id="wrapper">
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -41,8 +40,8 @@
             </a>
             <div id="menu_content" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" id="menu_write" href="write_log.php">写文章</a>
-                    <a class="collapse-item" id="menu_log" href="admin_log.php">文章</a>
+                    <a class="collapse-item" id="menu_write" href="article.php?action=write">写文章</a>
+                    <a class="collapse-item" id="menu_log" href="article.php">文章</a>
                     <a class="collapse-item" id="menu_sort" href="sort.php">分类</a>
                     <a class="collapse-item" id="menu_tag" href="tag.php">标签</a>
                 </div>
@@ -106,7 +105,7 @@
                 <button id="sidebarToggleTop" class="btn d-md-none rounded-circle mr-3">
                     <i class="icofont-navigation-menu"></i>
                 </button>
-                <form action="admin_log.php" method="get" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <form action="article.php" method="get" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
                         <input type="text" name="keyword" class="form-control bg-light border-0 small" placeholder="查找文章..." aria-label="Search" aria-describedby="basic-addon2">
                         <div class="input-group-append">
@@ -119,10 +118,10 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown no-arrow mx-1">
                         <a class="nav-link" href=".." target="_blank" title="在新窗口浏站点" role="button">
-                            <?php
-                            $blog_name = Option::get('blogname');
-                            echo empty($blog_name) ? '查看我的站点' : subString($blog_name, 0, 12);
-                            ?>
+							<?php
+							$blog_name = Option::get('blogname');
+							echo empty($blog_name) ? '查看我的站点' : subString($blog_name, 0, 12);
+							?>
                         </a>
                     </li>
                     <div class="topbar-divider d-none d-sm-block"></div>
