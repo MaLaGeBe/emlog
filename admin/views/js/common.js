@@ -85,10 +85,10 @@ function hideActived() {
 function displayToggle(id, keep) {
     $("#" + id).toggle();
     if (keep == 1) {
-        $.cookie('em_' + id, $("#" + id).css('display'), {expires: 365});
+        Cookies.set('em_' + id, $("#" + id).css('display'), {expires: 365})
     }
     if (keep == 2) {
-        $.cookie('em_' + id, $("#" + id).css('display'));
+        Cookies.set('em_' + id, $("#" + id).css('display'))
     }
 }
 
@@ -185,10 +185,9 @@ function autosave(act) {
     var content = Editor.getMarkdown();
     var excerpt = Editor_summary.getMarkdown();
     var tag = $.trim($("#tag").val());
-    var top = $("#post_options #top").attr("checked") == 'checked' ? 'y' : 'n';
-    var sortop = $("#post_options #sortop").attr("checked") == 'checked' ? 'y' : 'n';
-    var allow_remark = $("#post_options #allow_remark").attr("checked") == 'checked' ? 'y' : 'n';
-    var allow_tb = $("#post_options #allow_tb").attr("checked") == 'checked' ? 'y' : 'n';
+    var top = $("#top").is(":checked") ? 'y' : 'n';
+    var sortop = $("#sortop").is(":checked") ? 'y' : 'n';
+    var allow_remark = $("#allow_remark").is(":checked") ? 'y' : 'n';
     var password = $.trim($("#password").val());
     var ishide = $.trim($("#ishide").val());
     var token = $.trim($("#token").val());
@@ -205,7 +204,6 @@ function autosave(act) {
         + "&top=" + top
         + "&sortop=" + sortop
         + "&allow_remark=" + allow_remark
-        + "&allow_tb=" + allow_tb
         + "&password=" + password
         + "&token=" + token
         + "&ishide=" + ishide
@@ -248,7 +246,7 @@ function autosave(act) {
             var hours = digital.getHours();
             var mins = digital.getMinutes();
             var secs = digital.getSeconds();
-            $("#save_info").html("<span class=\"ajax_remind_1\">保存于"+hours+":"+mins+":"+secs+" </span>");
+            $("#save_info").html("<span class=\"ajax_remind_1\">保存于" + hours + ":" + mins + ":" + secs + " </span>");
 
             $("#" + nodeid).val(logid);
             $("#savedf").attr("disabled", false).val(btname);
@@ -289,16 +287,10 @@ $(function () {
         tr_checkbox.prop('checked', $(this).prop('checked'));
         event.stopPropagation();
     });
-
     // 点击表格每一行的checkbox，表格所有选中的checkbox数 = 表格行数时，则将表头的‘checkAll’单选框置为选中，否则置为未选中
     $('table tbody tr').find('input[type=checkbox]').click(function (event) {
         var tbr = $('table tbody tr');
         $('#checkAll').prop('checked', tbr.find('input[type=checkbox]:checked').length == tbr.length ? true : false);
         event.stopPropagation();
-    });
-
-    // 点击表格行(行内任意位置)，触发选中或取消选中该行的checkbox
-    $('table tbody tr').click(function () {
-        $(this).find('input[type=checkbox]').click();
     });
 });
