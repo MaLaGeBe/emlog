@@ -85,14 +85,9 @@ var XMLHttp = {
 		}
 	},
 };
-function sendinfo(url, node) {
-	updateEle(
-		node,
-		'<div><span style="background-color:#FFFFE5; color:#666666;">加载中...</span></div>'
-	);
-	XMLHttp.sendReq("GET", url, "", function (obj) {
-		updateEle(node, obj.responseText);
-	});
+function sendinfo(url,node){
+	updateEle(node,"<div class='cal_loading'>&nbsp;</div>");
+	XMLHttp.sendReq('GET',url,'',function(obj){updateEle(node,obj.responseText);});
 }
 function loadr(url, tid) {
 	url = url + "&stamp=" + timestamp();
@@ -158,4 +153,16 @@ function cancelReply() {
 	document.getElementById("comment-pid").value = 0;
 	document.getElementById("cancel-reply").style.display = "none";
 	commentPlace.appendChild(response);
+}
+
+function cal_margin(links){
+		var count,menus;
+		menus=document.getElementById('dropmenus');		
+		count=menus.offsetWidth-links.offsetWidth;
+		var div_ls = document.getElementsByTagName('ul')
+		for(var i=0;i<div_ls.length;i++){
+		if(div_ls[i].getAttribute('id') == 'dropmenus'){
+			div_ls[i].style.marginLeft='-'+count/2+'px';
+			}
+        }
 }
